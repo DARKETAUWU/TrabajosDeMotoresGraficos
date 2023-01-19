@@ -404,7 +404,9 @@
       </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ResourceCompile Include="Tutorial07.rc" />
+  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Tutorial07.cpp" />
     <ClCompile Include="Tutorial07.cpp" />
@@ -414,8 +416,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Resource.h" />
-    <CLInclude Include="resource.h" />
-    <ResourceCompile Include="Tutorial07.rc" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
