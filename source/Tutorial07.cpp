@@ -113,7 +113,7 @@ XMMATRIX                            g_World;
 XMMATRIX                            g_View;
 XMMATRIX                            g_Projection;
 XMFLOAT4                            g_vMeshColor( 0.7f, 0.7f, 0.7f, 1.0f );
-
+Camera cam;
 
 //--------------------------------------------------------------------------------------
 // Forward declarations
@@ -561,7 +561,7 @@ HRESULT InitDevice()
     XMVECTOR Up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
     g_View = XMMatrixLookAtLH( Eye, At, Up );
 
-    Camera cam;
+    
 
     ///CBNeverChanges cbNeverChanges;
     //cbNeverChanges.mView = XMMatrixTranspose( g_View );
@@ -580,7 +580,71 @@ HRESULT InitDevice()
     return S_OK;
 }
 
+void update()
+{
+    // Update our time
+    static float t = 0.0f;
+    if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
+    {
+        t += (float)XM_PI * 0.0125f;
+    }
+    else
+    {
+        static unsigned int dwTimeStart = 0;
+        unsigned int dwTimeCur = GetTickCount();
+        if (dwTimeStart == 0)
+            dwTimeStart = dwTimeCur;
+        t = (dwTimeCur - dwTimeStart) / 1000.0f;
+    }
 
+    // Modify the color
+    g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+    g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+    g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+
+
+    // Rotate cube around the origin
+    g_World = XMMatrixScaling(.5f, .5f, .5f) * XMMatrixRotationY(t) * XMMatrixTranslation(1, 0, 0);
+
+    //
+    // Update variables that change once per frame
+    //
+    CBChangesEveryFrame cb;
+    cb.mWorld = XMMatrixTranspose(g_World);
+    cb.vMeshColor = g_vMeshColor;
+
+    //UpdateCamera Buffers
+    g_pImmediateContext->UpdateSubresource(g_Camera, 0, nullptr, &cam, 0, 0);
+
+    //Update Mesh Buffers
+    g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0);
+
+}
+
+void destroy()
+{
+    if (g_pImmediateContext) g_pImmediateContext->ClearState();
+
+    if (g_pSamplerLinear) g_pSamplerLinear->Release();
+    if (g_pTextureRV) g_pTextureRV->Release();
+
+    //if( g_pCBNeverChanges ) g_pCBNeverChanges->Release();
+    //if( g_pCBChangeOnResize ) g_pCBChangeOnResize->Release();
+    if (g_Camera) g_Camera->Release();
+
+    if (g_pCBChangesEveryFrame) g_pCBChangesEveryFrame->Release();
+    if (g_pVertexBuffer) g_pVertexBuffer->Release();
+    if (g_pIndexBuffer) g_pIndexBuffer->Release();
+    if (g_pVertexLayout) g_pVertexLayout->Release();
+    if (g_pVertexShader) g_pVertexShader->Release();
+    if (g_pPixelShader) g_pPixelShader->Release();
+    if (g_pDepthStencil) g_pDepthStencil->Release();
+    if (g_pDepthStencilView) g_pDepthStencilView->Release();
+    if (g_pRenderTargetView) g_pRenderTargetView->Release();
+    if (g_pSwapChain) g_pSwapChain->Release();
+    if (g_pImmediateContext) g_pImmediateContext->Release();
+    if (g_pd3dDevice) g_pd3dDevice->Release();
+}
 //--------------------------------------------------------------------------------------
 // Clean up the objects we've created
 //--------------------------------------------------------------------------------------
@@ -640,7 +704,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 void Render()
 {
     // Update our time
-    static float t = 0.0f;
+    /*static float t = 0.0f;
     if( g_driverType == D3D_DRIVER_TYPE_REFERENCE )
     {
         t += ( float )XM_PI * 0.0125f;
@@ -652,50 +716,38 @@ void Render()
         if( dwTimeStart == 0 )
             dwTimeStart = dwTimeCur;
         t = ( dwTimeCur - dwTimeStart ) / 1000.0f;
-    }
-
-    // Rotate cube around the origin
-    g_World = XMMatrixRotationY( t );
-
-    // Modify the color
-    g_vMeshColor.x = ( sinf( t * 1.0f ) + 1.0f ) * 0.5f;
-    g_vMeshColor.y = ( cosf( t * 3.0f ) + 1.0f ) * 0.5f;
-    g_vMeshColor.z = ( sinf( t * 5.0f ) + 1.0f ) * 0.5f;
+    }*/
 
     //
     // Clear the back buffer
     //
     float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
-    g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, ClearColor );
+    g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
 
     //
     // Clear the depth buffer to 1.0 (max depth)
     //
-    g_pImmediateContext->ClearDepthStencilView( g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
-
-    //
-    // Update variables that change once per frame
-    //
-    CBChangesEveryFrame cb;
-    cb.mWorld = XMMatrixTranspose( g_World );
-    cb.vMeshColor = g_vMeshColor;
-    g_pImmediateContext->UpdateSubresource( g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0 );
+    g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     //
     // Render the cube
     //
-    g_pImmediateContext->VSSetShader( g_pVertexShader, nullptr, 0 );
+    g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
     //g_pImmediateContext->VSSetConstantBuffers( 0, 1, &g_pCBNeverChanges );
     //g_pImmediateContext->VSSetConstantBuffers( 1, 1, &g_pCBChangeOnResize );
-    g_pImmediateContext->VSSetConstantBuffers( 2, 1, &g_pCBChangesEveryFrame );
-    g_pImmediateContext->PSSetShader( g_pPixelShader, nullptr, 0 );
-    g_pImmediateContext->PSSetConstantBuffers( 2, 1, &g_pCBChangesEveryFrame );
-    g_pImmediateContext->PSSetShaderResources( 0, 1, &g_pTextureRV );
-    g_pImmediateContext->PSSetSamplers( 0, 1, &g_pSamplerLinear );
-    g_pImmediateContext->DrawIndexed( 36, 0, 0 );
+    g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_Camera);
+
+    g_pImmediateContext->VSSetConstantBuffers(1, 1, &g_pCBChangesEveryFrame);
+    g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
+
+    g_pImmediateContext->PSSetConstantBuffers(1, 1, &g_pCBChangesEveryFrame);
+    g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
+
+    g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
+    g_pImmediateContext->DrawIndexed(36, 0, 0);
 
     //
     // Present our back buffer to our front buffer
     //
-    g_pSwapChain->Present( 0, 0 );
+    g_pSwapChain->Present(0, 0);
 }

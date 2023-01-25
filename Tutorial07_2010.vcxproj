@@ -412,12 +412,10 @@
     <ClCompile Include="Tutorial07.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Tutorial07.fx" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\Resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="bin\Tutorial07.fx" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
