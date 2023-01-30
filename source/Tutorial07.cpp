@@ -11,6 +11,7 @@
 #include <d3dcompiler.h>
 #include <xnamath.h>
 #include "resource.h"
+#include <vector>
 
 
 //--------------------------------------------------------------------------------------
@@ -25,10 +26,6 @@ struct SimpleVertex
 
 };
 
-struct Camera {
-    XMMATRIX mView;
-    XMMATRIX mProjection;
-};
 
 //struct CBNeverChanges
 //{
@@ -372,6 +369,51 @@ HRESULT InitDevice()
                     "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK );
         return hr;
     }
+
+    D3D11_INPUT_ELEMENT_DESC layout[] =
+    {
+        {
+            "Position", //Semantic Name identificacion para la estructura en el shader
+            0, // semantic index en el caso de tener mas de un semantic Name igual
+            DXGI_FORMAT_R32G32B32A32_FLOAT, // formant clasificador para el tipo de datos
+            0,
+            D3D11_APPEND_ALIGNED_ELEMENT,
+           D3D11_INPUT_PER_INSTANCE_DATA,
+           0
+        },
+        {
+            "TEXCOORD",
+            0,
+            DXGI_FORMAT_R32G32B32A32_FLOAT,
+            0,
+            D3D11_APPEND_ALIGNED_ELEMENT,
+            D3D11_INPUT_PER_INSTANCE_DATA,
+            0
+        },
+    };
+
+
+    std::vector <D3D11_INPUT_ELEMENT_DESC> Layout;
+
+    D3D11_INPUT_ELEMENT_DESC position;
+    position.SemanticName = "POSITION";
+    position.SemanticIndex = 0;
+    position.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+    position.InputSlot = 0;
+    position.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+    position.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+    position.InstanceDataStepRate = 0;
+    Layout.push_back(position);
+
+    D3D11_INPUT_ELEMENT_DESC texcoord;
+    texcoord.SemanticName = "TEXCOORD";
+    texcoord.SemanticIndex = 0;
+    texcoord.Format = DXGI_FORMAT_R32G32_FLOAT;
+    texcoord.InputSlot = 0;
+    texcoord.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+    texcoord.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+    texcoord.InstanceDataStepRate = 0;
+    Layout.push_back(texcoord);
 
     // Create the vertex shader
     hr = g_pd3dDevice->CreateVertexShader( pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &g_pVertexShader );
