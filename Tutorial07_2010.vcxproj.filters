@@ -15,20 +15,20 @@
     <Filter Include="include">
       <UniqueIdentifier>{c31f00aa-277a-4cf2-a63f-f6aebb3e1067}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source">
-      <UniqueIdentifier>{a716d67d-e678-4fe3-84b4-5a8fac13b685}</UniqueIdentifier>
+    <Filter Include="src">
+      <UniqueIdentifier>{beb42163-cf37-4896-aae5-789b7cf92e02}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Resource.h">
       <Filter>include</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Tutorial07.cpp" />
-    <ClCompile Include="source\Tutorial07.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
+    <ClInclude Include="include\Time.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Prerequisitesh.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tutorial07.rc">
@@ -36,8 +36,16 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="bin\Tutorial07.fx">
+    <ClCompile Include="src\Time.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tutorial07.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Tutorial07.fx">
       <Filter>Shaders</Filter>
-    </FxCompile>
+    </None>
   </ItemGroup>
 </Project>

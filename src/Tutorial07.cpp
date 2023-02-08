@@ -5,15 +5,21 @@
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //--------------------------------------------------------------------------------------
-#include <windows.h>
+#include <windows.h> 
 #include <d3d11.h>
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <xnamath.h>
 #include "resource.h"
 #include <vector>
-
-
+#include "Time.h"
+#define WINDOWS
+#define DBOUT( s )            \
+{                             \
+   std::wostringstream os_;    \
+   os_ << s;                   \
+   OutputDebugStringW( os_.str().c_str() );  \
+}
 //--------------------------------------------------------------------------------------
 // Structures
 // Esta estructura esta encargada de almacenar la informacion que tendran nuestros objetos
@@ -43,6 +49,13 @@ struct CBChangesEveryFrame
     XMMATRIX mWorld;
     XMFLOAT4 vMeshColor;
 };
+struct Vector3 // First we have to initialize the vectors where the object is moving
+    //We have to put everything at 0, since it is the central point of the coordinates where it is moving
+{
+    float x = 0.0f; // Vector x
+    float y = 0.0f; // Vector y
+    float z = 0.0f; // Vector z
+};
 
 struct Camera
 {
@@ -51,36 +64,7 @@ struct Camera
 };
 
 
-struct Personaje_Atributos
-{
-public:
-    float Resistencia = 0.0f;
-    float Ataque = 0.0f;
 
-    Personaje_Atributos() {
-        Resistencia = 100.0f;
-        Ataque = 200.0f;
-    }
-
-    float GetAttack() {
-        return Ataque;
-    }
-};
-
-class Behavior {
-public:
-    Behavior();
-    //_Behavior();
-    virtual void init() = 0;
-    virtual void update() = 0;
-    virtual void render() = 0;
-    virtual void destroy() = 0;
-};
-struct Actor : Behavior
-{
-public: 
-    void init() override;
-};
 
 //--------------------------------------------------------------------------------------
 // Global Variables
@@ -101,7 +85,7 @@ ID3D11InputLayout*                  g_pVertexLayout = nullptr;
 ID3D11Buffer*                       g_pVertexBuffer = nullptr;
 ID3D11Buffer*                       g_pIndexBuffer = nullptr;
 //ID3D11Buffer*                       g_pCBNeverChanges = nullptr;
-ID3D11Buffer* g_Camera = nullptr;
+ID3D11Buffer*                       g_Camera = nullptr;
 //ID3D11Buffer*                       g_pCBChangeOnResize = nullptr;
 ID3D11Buffer*                       g_pCBChangesEveryFrame = nullptr;
 ID3D11ShaderResourceView*           g_pTextureRV = nullptr;
@@ -110,38 +94,44 @@ XMMATRIX                            g_World;
 XMMATRIX                            g_View;
 XMMATRIX                            g_Projection;
 XMFLOAT4                            g_vMeshColor( 0.7f, 0.7f, 0.7f, 1.0f );
-Camera cam;
+Camera cam; 
+Vector3 v3Position; //We call the function of the vectors to occupy them in the project
+float fSpeed = 0.1f; //We initialize the variant of the speed with which it will move
+
+Time  g_time; //To use the variables we need to call the Time library, but first we must have a variable
+
 
 //--------------------------------------------------------------------------------------
 // Forward declarations
 //--------------------------------------------------------------------------------------
 HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow ); // funciona como un booleano y hay que ocuparlo con mesura 
 HRESULT InitDevice(); // duda que es el HRESULT
-void CleanupDevice(); // que borra la pantalla en modo gráfico y establece la posición actual en (0,0). Limpiar la pantalla consiste en llenar la pantalla con el color de fondo actual.
+//void CleanupDevice(); // que borra la pantalla en modo gráfico y establece la posición actual en (0,0). Limpiar la pantalla consiste en llenar la pantalla con el color de fondo actual.
 LRESULT CALLBACK    WndProc( HWND, UINT, WPARAM, LPARAM );
 void Render();
-
+void update(float deltatime);
+void destroy();
 
 //Esta funcion esta encargada de inicializar todos los datos que se encuentran
 //en el proyecto
-void init() {
-
-}
-
-//esta funcion esta encargada de actualizar la logica del proyecto
-void update() {
-
-}
-
-//Esta funcion esta encargada de actualizar exclusivamente los dato 
-//que se presenten en la pantalla
-void render() {
-
-}
-//Esta funcion esta encargada de liberar los recursos utilizados en el programa
-void Destroy() {
-
-}
+//void init() {
+//
+//}
+//
+////esta funcion esta encargada de actualizar la logica del proyecto
+//void update(float deltatime) {
+//
+//}
+//
+////Esta funcion esta encargada de actualizar exclusivamente los dato 
+////que se presenten en la pantalla
+//void render() {
+//
+//}
+////Esta funcion esta encargada de liberar los recursos utilizados en el programa
+//void Destroy() {
+//
+//}
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
 // loop. Idle time is used to render the scene.
@@ -156,10 +146,12 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 
     if( FAILED( InitDevice() ) )
     {
-        CleanupDevice();
+        //CleanupDevice();
+        destroy();
         return 0;
     }
 
+    g_time.init();
     // Main message loop
     MSG msg = {0};
     while( WM_QUIT != msg.message )
@@ -171,11 +163,15 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
         }
         else
         {
+            g_time.update();
+            update(g_time.m_deltatime);
             Render();
+            
         }
     }
 
-    CleanupDevice();
+   // CleanupDevice();
+    destroy();
 
     return ( int )msg.wParam;
 }
@@ -370,27 +366,13 @@ HRESULT InitDevice()
         return hr;
     }
 
-    D3D11_INPUT_ELEMENT_DESC layout[] =
+    // Create the vertex shader
+    hr = g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &g_pVertexShader);
+    if (FAILED(hr))
     {
-        {
-            "Position", //Semantic Name identificacion para la estructura en el shader
-            0, // semantic index en el caso de tener mas de un semantic Name igual
-            DXGI_FORMAT_R32G32B32A32_FLOAT, // formant clasificador para el tipo de datos
-            0,
-            D3D11_APPEND_ALIGNED_ELEMENT,
-           D3D11_INPUT_PER_INSTANCE_DATA,
-           0
-        },
-        {
-            "TEXCOORD",
-            0,
-            DXGI_FORMAT_R32G32B32A32_FLOAT,
-            0,
-            D3D11_APPEND_ALIGNED_ELEMENT,
-            D3D11_INPUT_PER_INSTANCE_DATA,
-            0
-        },
-    };
+        pVSBlob->Release();
+        return hr;
+    }
 
 
     std::vector <D3D11_INPUT_ELEMENT_DESC> Layout;
@@ -415,24 +397,10 @@ HRESULT InitDevice()
     texcoord.InstanceDataStepRate = 0;
     Layout.push_back(texcoord);
 
-    // Create the vertex shader
-    hr = g_pd3dDevice->CreateVertexShader( pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &g_pVertexShader );
-    if( FAILED( hr ) )
-    {    
-        pVSBlob->Release();
-        return hr;
-    }
-
-    // Define the input layout
-    D3D11_INPUT_ELEMENT_DESC layout[] =
-    {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    };
-    UINT numElements = ARRAYSIZE( layout );
+   
 
     // Create the input layout
-    hr = g_pd3dDevice->CreateInputLayout( layout, numElements, pVSBlob->GetBufferPointer(),
+    hr = g_pd3dDevice->CreateInputLayout( Layout.data(), Layout.size(), pVSBlob->GetBufferPointer(),
                                           pVSBlob->GetBufferSize(), &g_pVertexLayout );
     pVSBlob->Release();
     if( FAILED( hr ) )
@@ -569,6 +537,11 @@ HRESULT InitDevice()
     hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_Camera);
     if (FAILED(hr))
         return hr;
+
+    bd.ByteWidth = sizeof(Camera);
+    hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_Camera);
+    if (FAILED(hr))
+        return hr;
     
     bd.ByteWidth = sizeof(CBChangesEveryFrame);
     hr = g_pd3dDevice->CreateBuffer( &bd, nullptr, &g_pCBChangesEveryFrame );
@@ -618,17 +591,19 @@ HRESULT InitDevice()
 
     cam.mView = XMMatrixTranspose(g_View);
     cam.mProjection = XMMatrixTranspose(g_Projection);
-    g_pImmediateContext->UpdateSubresource(g_Camera, 0, nullptr, &cam, 0, 0);
+    v3Position.x = 0;
+    v3Position.y = 0;
+    //g_pImmediateContext->UpdateSubresource(g_Camera, 0, nullptr, &cam, 0, 0);
     return S_OK;
 }
 
-void update()
+void update(float deltatime)
 {
     // Update our time
-    static float t = 0.0f;
+    
     if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
     {
-        t += (float)XM_PI * 0.0125f;
+        g_time.m_deltatime += (float)XM_PI * 0.0125f;
     }
     else
     {
@@ -636,18 +611,19 @@ void update()
         unsigned int dwTimeCur = GetTickCount();
         if (dwTimeStart == 0)
             dwTimeStart = dwTimeCur;
-        t = (dwTimeCur - dwTimeStart) / 1000.0f;
+        g_time.m_deltatime = (dwTimeCur - dwTimeStart) / 1000.0f;
     }
 
     // Modify the color
-    g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
-    g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
-    g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+    g_vMeshColor.x = (sinf(g_time.m_deltatime * 1.0f) + 1.0f) * 0.5f;
+    g_vMeshColor.y = (cosf(g_time.m_deltatime * 3.0f) + 1.0f) * 0.5f;
+    g_vMeshColor.z = (sinf(g_time.m_deltatime * 5.0f) + 1.0f) * 0.5f;
 
 
     // Rotate cube around the origin
-    g_World = XMMatrixScaling(.5f, .5f, .5f) * XMMatrixRotationY(t) * XMMatrixTranslation(1, 0, 0);
+    //g_World = XMMatrixScaling(1,1,1) * XMMatrixRotationY(deltatime) * XMMatrixTranslation(1, 0, 0);
 
+    g_World = XMMatrixScaling(.5f, .5f, .5f) * XMMatrixRotationY(g_time.m_deltatime) * XMMatrixTranslation(v3Position.x, v3Position.y, v3Position.z);
     //
     // Update variables that change once per frame
     //
@@ -656,10 +632,11 @@ void update()
     cb.vMeshColor = g_vMeshColor;
 
     //UpdateCamera Buffers
-    g_pImmediateContext->UpdateSubresource(g_Camera, 0, nullptr, &cam, 0, 0);
+    
 
     //Update Mesh Buffers
     g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0);
+    g_pImmediateContext->UpdateSubresource(g_Camera, 0, nullptr, &cam, 0, 0);
 
 }
 
@@ -690,33 +667,33 @@ void destroy()
 //--------------------------------------------------------------------------------------
 // Clean up the objects we've created
 //--------------------------------------------------------------------------------------
-void CleanupDevice()
-{
-    if( g_pImmediateContext ) g_pImmediateContext->ClearState();
-
-    if( g_pSamplerLinear ) g_pSamplerLinear->Release();
-    if( g_pTextureRV ) g_pTextureRV->Release();
-    //if( g_pCBNeverChanges ) g_pCBNeverChanges->Release();
-    //if( g_pCBChangeOnResize ) g_pCBChangeOnResize->Release();
-    if( g_pCBChangesEveryFrame ) g_pCBChangesEveryFrame->Release();
-    if( g_pVertexBuffer ) g_pVertexBuffer->Release();
-    if( g_pIndexBuffer ) g_pIndexBuffer->Release();
-    if( g_pVertexLayout ) g_pVertexLayout->Release();
-    if( g_pVertexShader ) g_pVertexShader->Release();
-    if( g_pPixelShader ) g_pPixelShader->Release();
-    if( g_pDepthStencil ) g_pDepthStencil->Release();
-    if( g_pDepthStencilView ) g_pDepthStencilView->Release();
-    if( g_pRenderTargetView ) g_pRenderTargetView->Release();
-    if( g_pSwapChain ) g_pSwapChain->Release();
-    if( g_pImmediateContext ) g_pImmediateContext->Release();
-    if( g_pd3dDevice ) g_pd3dDevice->Release();
-}
+//void CleanupDevice()
+//{
+//    if( g_pImmediateContext ) g_pImmediateContext->ClearState();
+//
+//    if( g_pSamplerLinear ) g_pSamplerLinear->Release();
+//    if( g_pTextureRV ) g_pTextureRV->Release();
+//    //if( g_pCBNeverChanges ) g_pCBNeverChanges->Release();
+//    //if( g_pCBChangeOnResize ) g_pCBChangeOnResize->Release();
+//    if( g_pCBChangesEveryFrame ) g_pCBChangesEveryFrame->Release();
+//    if( g_pVertexBuffer ) g_pVertexBuffer->Release();
+//    if( g_pIndexBuffer ) g_pIndexBuffer->Release();
+//    if( g_pVertexLayout ) g_pVertexLayout->Release();
+//    if( g_pVertexShader ) g_pVertexShader->Release();
+//    if( g_pPixelShader ) g_pPixelShader->Release();
+//    if( g_pDepthStencil ) g_pDepthStencil->Release();
+//    if( g_pDepthStencilView ) g_pDepthStencilView->Release();
+//    if( g_pRenderTargetView ) g_pRenderTargetView->Release();
+//    if( g_pSwapChain ) g_pSwapChain->Release();
+//    if( g_pImmediateContext ) g_pImmediateContext->Release();
+//    if( g_pd3dDevice ) g_pd3dDevice->Release();
+//}
 
 
 //--------------------------------------------------------------------------------------
 // Called every time the application receives a message
 //--------------------------------------------------------------------------------------
-LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     PAINTSTRUCT ps;
     HDC hdc;
@@ -730,6 +707,38 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 
         case WM_DESTROY:
             PostQuitMessage( 0 );
+            break;
+
+        case WM_KEYDOWN:
+
+            switch (wParam)
+            {
+                case 'A':
+                    v3Position.x -= fSpeed * g_time.m_deltatime;
+                    break;
+                case 'D':
+                    v3Position.x += fSpeed * g_time.m_deltatime;
+                    break;
+                case 'W':
+                    v3Position.y += fSpeed * g_time.m_deltatime;
+                    break;
+                case 'S':
+                    v3Position.y -= fSpeed * g_time.m_deltatime;
+                    break;
+                case 'Q':
+                    v3Position.z += fSpeed * g_time.m_deltatime;
+                    break;
+                case 'E':
+                    v3Position.z -= fSpeed * g_time.m_deltatime;
+                    break;
+                case 'G':
+                    v3Position.x = 0;
+                    v3Position.y = 0;
+                    v3Position.z = 0;
+                    break;
+
+            }
+
             break;
 
         default:
