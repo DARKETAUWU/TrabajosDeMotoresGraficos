@@ -591,8 +591,8 @@ HRESULT InitDevice()
 
     cam.mView = XMMatrixTranspose(g_View);
     cam.mProjection = XMMatrixTranspose(g_Projection);
-    v3Position.x = 0;
-    v3Position.y = 0;
+    v3Position.x = 0; // The vector x is initialized to 0
+    v3Position.y = 0; // The vector y is initialized to 0
     //g_pImmediateContext->UpdateSubresource(g_Camera, 0, nullptr, &cam, 0, 0);
     return S_OK;
 }
@@ -647,8 +647,7 @@ void destroy()
     if (g_pSamplerLinear) g_pSamplerLinear->Release();
     if (g_pTextureRV) g_pTextureRV->Release();
 
-    //if( g_pCBNeverChanges ) g_pCBNeverChanges->Release();
-    //if( g_pCBChangeOnResize ) g_pCBChangeOnResize->Release();
+
     if (g_Camera) g_Camera->Release();
 
     if (g_pCBChangesEveryFrame) g_pCBChangesEveryFrame->Release();
@@ -664,31 +663,6 @@ void destroy()
     if (g_pImmediateContext) g_pImmediateContext->Release();
     if (g_pd3dDevice) g_pd3dDevice->Release();
 }
-//--------------------------------------------------------------------------------------
-// Clean up the objects we've created
-//--------------------------------------------------------------------------------------
-//void CleanupDevice()
-//{
-//    if( g_pImmediateContext ) g_pImmediateContext->ClearState();
-//
-//    if( g_pSamplerLinear ) g_pSamplerLinear->Release();
-//    if( g_pTextureRV ) g_pTextureRV->Release();
-//    //if( g_pCBNeverChanges ) g_pCBNeverChanges->Release();
-//    //if( g_pCBChangeOnResize ) g_pCBChangeOnResize->Release();
-//    if( g_pCBChangesEveryFrame ) g_pCBChangesEveryFrame->Release();
-//    if( g_pVertexBuffer ) g_pVertexBuffer->Release();
-//    if( g_pIndexBuffer ) g_pIndexBuffer->Release();
-//    if( g_pVertexLayout ) g_pVertexLayout->Release();
-//    if( g_pVertexShader ) g_pVertexShader->Release();
-//    if( g_pPixelShader ) g_pPixelShader->Release();
-//    if( g_pDepthStencil ) g_pDepthStencil->Release();
-//    if( g_pDepthStencilView ) g_pDepthStencilView->Release();
-//    if( g_pRenderTargetView ) g_pRenderTargetView->Release();
-//    if( g_pSwapChain ) g_pSwapChain->Release();
-//    if( g_pImmediateContext ) g_pImmediateContext->Release();
-//    if( g_pd3dDevice ) g_pd3dDevice->Release();
-//}
-
 
 //--------------------------------------------------------------------------------------
 // Called every time the application receives a message
@@ -710,28 +684,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_KEYDOWN:
+            //To use the movement system we based ourselves on the way in which unity handles the movement. 
+            //Therefore, in the system we put that in case the program receives an instruction through the keyboard, it will make a movement
 
             switch (wParam)
             {
-                case 'A':
-                    v3Position.x -= fSpeed * g_time.m_deltatime;
+                case 'A': //For the movement to the left we use the A key, so in the event that the keyboard marks that key
+                    v3Position.x -= fSpeed * g_time.m_deltatime; // For movement to the left, its vector should be decreased by multiplying the velocity by the real time.
                     break;
-                case 'D':
-                    v3Position.x += fSpeed * g_time.m_deltatime;
+                case 'D': //For the movement to the right we use the D key, so in the event that the keyboard marks that key
+                    v3Position.x += fSpeed * g_time.m_deltatime; // it will move the object along the x axis, multiplying its speed by the real time of the computer
                     break;
-                case 'W':
-                    v3Position.y += fSpeed * g_time.m_deltatime;
+                case 'W': //For the upward movement we use the D key, so in the event that the keyboard marks that key
+                    v3Position.y += fSpeed * g_time.m_deltatime; //For the upward movement, the speed must be added to the vector "y" multiplied by the real time
                     break;
-                case 'S':
-                    v3Position.y -= fSpeed * g_time.m_deltatime;
+                case 'S':  //For downward movement, the keyboard must detect that the letter "S" is pressed.
+                    v3Position.y -= fSpeed * g_time.m_deltatime; //For its movement, the vector "y" will be decreased by multiplying its speed with real time
                     break;
-                case 'Q':
-                    v3Position.z += fSpeed * g_time.m_deltatime;
+                case 'Q': // Forward movement, to detect forward movement, the system should detect the "Q" key
+                    v3Position.z += fSpeed * g_time.m_deltatime; // For its movement the vector will be increased in "z" multiplying the speed by the real time
                     break;
-                case 'E':
-                    v3Position.z -= fSpeed * g_time.m_deltatime;
+                case 'E': // For the movement towards the bottom the case must detect the pressure of the "E" key
+                    v3Position.z -= fSpeed * g_time.m_deltatime; // To move it, you have to decrease in its vector z the result of multiplying the velocity by the time.
                     break;
-                case 'G':
+                case 'G': //When it detects that the keyboard presses the G key, it resets its position to 0 in all directions.
                     v3Position.x = 0;
                     v3Position.y = 0;
                     v3Position.z = 0;
@@ -754,21 +730,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 //--------------------------------------------------------------------------------------
 void Render()
 {
-    // Update our time
-    /*static float t = 0.0f;
-    if( g_driverType == D3D_DRIVER_TYPE_REFERENCE )
-    {
-        t += ( float )XM_PI * 0.0125f;
-    }
-    else
-    {
-        static DWORD dwTimeStart = 0;
-        DWORD dwTimeCur = GetTickCount();
-        if( dwTimeStart == 0 )
-            dwTimeStart = dwTimeCur;
-        t = ( dwTimeCur - dwTimeStart ) / 1000.0f;
-    }*/
-
+ 
     //
     // Clear the back buffer
     //
