@@ -95,7 +95,7 @@ XMMATRIX                            g_View;
 XMMATRIX                            g_Projection;
 XMFLOAT4                            g_vMeshColor( 0.7f, 0.7f, 0.7f, 1.0f );
 Camera cam; 
-Vector3 v3Position; //We call the function of the vectors to occupy them in the project
+Vector3 Posicion3D; //We call the function of the vectors to occupy them in the project
 float fSpeed = 0.1f; //We initialize the variant of the speed with which it will move
 
 Time  g_time; //To use the variables we need to call the Time library, but first we must have a variable
@@ -591,8 +591,8 @@ HRESULT InitDevice()
 
     cam.mView = XMMatrixTranspose(g_View);
     cam.mProjection = XMMatrixTranspose(g_Projection);
-    v3Position.x = 0; // The vector x is initialized to 0
-    v3Position.y = 0; // The vector y is initialized to 0
+    Posicion3D.x = 0; // The vector x is initialized to 0
+    Posicion3D.y = 0; // The vector y is initialized to 0
     //g_pImmediateContext->UpdateSubresource(g_Camera, 0, nullptr, &cam, 0, 0);
     return S_OK;
 }
@@ -623,7 +623,7 @@ void update(float deltatime)
     // Rotate cube around the origin
     //g_World = XMMatrixScaling(1,1,1) * XMMatrixRotationY(deltatime) * XMMatrixTranslation(1, 0, 0);
 
-    g_World = XMMatrixScaling(.5f, .5f, .5f) * XMMatrixRotationY(g_time.m_deltatime) * XMMatrixTranslation(v3Position.x, v3Position.y, v3Position.z);
+    g_World = XMMatrixScaling(.5f, .5f, .5f) * XMMatrixRotationY(g_time.m_deltatime) * XMMatrixTranslation(Posicion3D.x, Posicion3D.y, Posicion3D.z);
     //
     // Update variables that change once per frame
     //
@@ -690,27 +690,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (wParam)
             {
                 case 'A': //For the movement to the left we use the A key, so in the event that the keyboard marks that key
-                    v3Position.x -= fSpeed * g_time.m_deltatime; // For movement to the left, its vector should be decreased by multiplying the velocity by the real time.
+                    Posicion3D.x -= fSpeed * g_time.m_deltatime; // For movement to the left, its vector should be decreased by multiplying the velocity by the real time.
                     break;
                 case 'D': //For the movement to the right we use the D key, so in the event that the keyboard marks that key
-                    v3Position.x += fSpeed * g_time.m_deltatime; // it will move the object along the x axis, multiplying its speed by the real time of the computer
+                    Posicion3D.x += fSpeed * g_time.m_deltatime; // it will move the object along the x axis, multiplying its speed by the real time of the computer
                     break;
                 case 'W': //For the upward movement we use the D key, so in the event that the keyboard marks that key
-                    v3Position.y += fSpeed * g_time.m_deltatime; //For the upward movement, the speed must be added to the vector "y" multiplied by the real time
+                    Posicion3D.y += fSpeed * g_time.m_deltatime; //For the upward movement, the speed must be added to the vector "y" multiplied by the real time
                     break;
                 case 'S':  //For downward movement, the keyboard must detect that the letter "S" is pressed.
-                    v3Position.y -= fSpeed * g_time.m_deltatime; //For its movement, the vector "y" will be decreased by multiplying its speed with real time
+                    Posicion3D.y -= fSpeed * g_time.m_deltatime; //For its movement, the vector "y" will be decreased by multiplying its speed with real time
                     break;
                 case 'Q': // Forward movement, to detect forward movement, the system should detect the "Q" key
-                    v3Position.z += fSpeed * g_time.m_deltatime; // For its movement the vector will be increased in "z" multiplying the speed by the real time
+                    Posicion3D.z += fSpeed * g_time.m_deltatime; // For its movement the vector will be increased in "z" multiplying the speed by the real time
                     break;
                 case 'E': // For the movement towards the bottom the case must detect the pressure of the "E" key
-                    v3Position.z -= fSpeed * g_time.m_deltatime; // To move it, you have to decrease in its vector z the result of multiplying the velocity by the time.
+                    Posicion3D.z -= fSpeed * g_time.m_deltatime; // To move it, you have to decrease in its vector z the result of multiplying the velocity by the time.
                     break;
                 case 'G': //When it detects that the keyboard presses the G key, it resets its position to 0 in all directions.
-                    v3Position.x = 0;
-                    v3Position.y = 0;
-                    v3Position.z = 0;
+                    Posicion3D.x = 0;
+                    Posicion3D.y = 0;
+                    Posicion3D.z = 0;
                     break;
 
             }
