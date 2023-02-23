@@ -421,6 +421,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Commons.h" />
+    <ClInclude Include="include\DiviceContext.h" />
     <ClInclude Include="include\Prerequisites.h" />
     <ClInclude Include="include\Resource.h" />
     <ClInclude Include="include\Time.h" />
@@ -432,6 +433,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DiviceContext.cpp" />
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\Tutorial07.cpp" />
     <ClCompile Include="src\Window.cpp" />
