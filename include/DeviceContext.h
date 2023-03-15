@@ -19,14 +19,14 @@ public:
 
 	//Bind one or more render targets atomically and the depth-stencil buffer to the output-merger stage.
 	void
-	OMSetRenderTargets(	unsigned int NumViews, 
-											ID3D11RenderTargetView* const* ppRenderTargetViews, 
-			 								ID3D11DepthStencilView* pDepthStencilView);
+	OMSetRenderTargets(unsigned int NumViews, 
+			   ID3D11RenderTargetView* const* ppRenderTargetViews, 
+			   ID3D11DepthStencilView* pDepthStencilView);
 
 	//Bind an array of viewports to the rasterizer stage of the pipeline.
 	void 
 	RSSetViewports(	unsigned int NumViewports, 
-									const D3D11_VIEWPORT* pViewports);
+			const D3D11_VIEWPORT* pViewports);
 
 	//Bind an input-layout object to the input-assembler stage.
 	void
@@ -34,11 +34,11 @@ public:
 
 	//Bind an array of vertex buffers to the input-assembler stage.
 	void
-	IASetVertexBuffers(	unsigned int StartSlot, 
-											unsigned int NumBuffers, 
-											ID3D11Buffer* const* ppVertexBuffers, 
-											const unsigned int* pStrides, 
-											const unsigned int* pOffsets);
+	IASetVertexBuffers(unsigned int StartSlot, 
+			   unsigned int NumBuffers, 
+			   ID3D11Buffer* const* ppVertexBuffers, 
+			   const unsigned int* pStrides, 
+			   const unsigned int* pOffsets);
 	//Bind an index buffer to the input-assembler stage.
 	void
 	IASetIndexBuffer(	ID3D11Buffer* pIndexBufferm, 
