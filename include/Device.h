@@ -40,11 +40,11 @@ public:
 	//Create an input-layout object to describe the input-buffer data for the 
 	//input-assembler stage.
 	HRESULT
-		CreateInputLayout(	const D3D11_INPUT_ELEMENT_DESC* pInputElementDescs,
-												unsigned int NumElements,
-												const void* pShaderBytecodeWithInputSignature,
-							unsigned int BytecodeLength,
-							ID3D11InputLayout** ppInputLayout);
+	CreateInputLayout(	const D3D11_INPUT_ELEMENT_DESC* pInputElementDescs,
+											unsigned int NumElements,
+											const void* pShaderBytecodeWithInputSignature,
+											unsigned int BytecodeLength,
+											ID3D11InputLayout** ppInputLayout);
 
 	//Create a pixel shader.
 	HRESULT
