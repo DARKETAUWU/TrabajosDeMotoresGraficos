@@ -86,9 +86,9 @@ public:
 								unsigned int NumClassInstances);
 	//Sets the constant buffers used by the pixel shader pipeline stage.
 	void 
-		PSSetConstantBuffers(	unsigned int StartSlot, 
-								unsigned int NumBuffers, 
-								ID3D11Buffer* const* ppConstantBuffers);
+	PSSetConstantBuffers(	unsigned int StartSlot, 
+								        unsigned int NumBuffers, 
+								        ID3D11Buffer* const* ppConstantBuffers);
 	//Bind an array of shader resources to the pixel shader stage.
 	void 
 		PSSetShaderResources(	unsigned int StartSlot, 
