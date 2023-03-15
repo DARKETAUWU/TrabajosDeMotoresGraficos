@@ -41,21 +41,21 @@ public:
 			   const unsigned int* pOffsets);
 	//Bind an index buffer to the input-assembler stage.
 	void
-	IASetIndexBuffer(	ID3D11Buffer* pIndexBufferm, 
-										DXGI_FORMAT Format, 
-										unsigned int Offset);
+	IASetIndexBuffer(ID3D11Buffer* pIndexBufferm, 
+			 DXGI_FORMAT Format, 
+			 unsigned int Offset);
 	//Bind information about the primitive type, and data order that describes input data for the input assembler stage.
 	void
 	IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY Topology);
 
 	//The CPU copies data from memory to a subresource created in non-mappable memory.
 	void 
-	UpdateSubresource(	ID3D11Resource* pDstResource, 
-											unsigned int DstSubresource, 
-											const D3D11_BOX* pDstBox, 
-											const void* pSrcData, 
-											unsigned int SrcRowPitch, 
-											unsigned int SrcDepthPitch);
+	UpdateSubresource(ID3D11Resource* pDstResource, 
+			  unsigned int DstSubresource, 
+			  const D3D11_BOX* pDstBox, 
+			  const void* pSrcData, 
+			  unsigned int SrcRowPitch, 
+			  unsigned int SrcDepthPitch);
 
 	//Set all the elements in a render target to one value.
 	void 
@@ -103,9 +103,9 @@ public:
 
 	//Draw indexed, non-instanced primitives.
 	void 
-	DrawIndexed(	unsigned int IndexCount, 
-								unsigned int StartIndexLocation, 
-							unsigned int BaseVertexLocation);
+	DrawIndexed(unsigned int IndexCount, 
+		    unsigned int StartIndexLocation, 
+		    unsigned int BaseVertexLocation);
 	
 public:
 	//The variable with which it will be called in the entire class is referred to as many times as necessary
