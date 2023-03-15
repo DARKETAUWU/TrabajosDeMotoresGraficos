@@ -60,45 +60,46 @@ public:
 	//Set all the elements in a render target to one value.
 	void 
 	ClearRenderTargetView(	ID3D11RenderTargetView* pRenderTargetView, 
-													const FLOAT ColorRGBA[4]);
+				const FLOAT ColorRGBA[4]);
 
 	//Clears the depth-stencil resource.
 	void
 	ClearDepthStencilView(	ID3D11DepthStencilView* pDepthStencilView, 
-													unsigned int ClearFlags, 
-													float Depth, 
-													unsigned int Stencil);
+			        unsigned int ClearFlags, 
+				float Depth, 
+				unsigned int Stencil);
 	
 	//Set a vertex shader to the device.
 	void
 	VSSetShader(	ID3D11VertexShader* pVertexShader,
-								ID3D11ClassInstance* const* ppClassInstances,
-								unsigned int NumClassInstances);
+		        ID3D11ClassInstance* const* ppClassInstances,
+			unsigned int NumClassInstances);
 	//Sets the constant buffers used by the vertex shader pipeline stage.
 	void 
 	VSSetConstantBuffers(	unsigned int StartSlot, 
-												unsigned int NumBuffers, 
-												ID3D11Buffer* const* ppConstantBuffers);
+				unsigned int NumBuffers, 
+				ID3D11Buffer* const* ppConstantBuffers);
 	//Sets a pixel shader to the device.
 	void 
 	PSSetShader(	ID3D11PixelShader* pPixelShader,
-							  ID3D11ClassInstance* const* ppClassInstances, 
-								unsigned int NumClassInstances);
+			ID3D11ClassInstance* const* ppClassInstances, 
+			unsigned int NumClassInstances);
 	//Sets the constant buffers used by the pixel shader pipeline stage.
 	void 
 	PSSetConstantBuffers(	unsigned int StartSlot, 
-								        unsigned int NumBuffers, 
-								        ID3D11Buffer* const* ppConstantBuffers);
+                                unsigned int NumBuffers, 
+				ID3D11Buffer* const* ppConstantBuffers);
 	//Bind an array of shader resources to the pixel shader stage.
 	void 
-		PSSetShaderResources(	unsigned int StartSlot, 
-								unsigned int NumViews, 
-								ID3D11ShaderResourceView* const* ppShaderResourceViews);
+	PSSetShaderResources(	unsigned int StartSlot, 
+				unsigned int NumViews, 
+				ID3D11ShaderResourceView* const* ppShaderResourceViews);
+        
 	//Set an array of sampler states to the pixel shader pipeline stage.
 	void 
 	PSSetSamplers(	unsigned int StartSlot, 
-									unsigned int NumSamplet, 
-									ID3D11SamplerState* const* ppSamplers);
+			unsigned int NumSamplet, 
+			ID3D11SamplerState* const* ppSamplers);
 
 	//Draw indexed, non-instanced primitives.
 	void 
