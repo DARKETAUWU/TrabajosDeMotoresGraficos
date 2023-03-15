@@ -2,15 +2,12 @@
 
 struct 
 SimpleVertex{
-
     XMFLOAT3 Pos;
     XMFLOAT2 Tex;
-
 };
 
 struct 
 CBChangesEveryFrame{
-
     XMMATRIX mWorld;
     XMFLOAT4 vMeshColor;
 };

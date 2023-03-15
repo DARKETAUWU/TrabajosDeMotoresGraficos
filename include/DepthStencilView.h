@@ -5,7 +5,7 @@ class
 	Device;
 
 class
-	DepthStencilView
+DepthStencilView
 {
 public:
 	DepthStencilView() = default;

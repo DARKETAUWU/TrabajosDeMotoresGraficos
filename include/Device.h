@@ -48,10 +48,10 @@ public:
 
 	//Create a pixel shader.
 	HRESULT
-		CreatePixelShader(	const void* pShaderBytecode,
-							unsigned int BytecodeLength,
-							ID3D11ClassLinkage* pClassLinkage,
-							ID3D11PixelShader** ppPixelShader);
+	CreatePixelShader(const void* pShaderBytecode,
+		                unsigned int BytecodeLength,
+							      ID3D11ClassLinkage* pClassLinkage,
+							      ID3D11PixelShader** ppPixelShader);
 
 	//Creates a buffer (vertex buffer, index buffer, or shader-constant buffer).
 	HRESULT
