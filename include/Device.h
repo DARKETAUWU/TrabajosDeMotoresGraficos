@@ -20,15 +20,15 @@ public:
 								ID3D11DepthStencilView** ppDepthStencilView);
 
 	HRESULT
-		CreateRenderTargetView(	ID3D11Resource* pResource,
-								const D3D11_RENDER_TARGET_VIEW_DESC* pDesc,
-								ID3D11RenderTargetView** ppRTView);
+		CreateRenderTargetView(ID3D11Resource* pResource,
+								           const D3D11_RENDER_TARGET_VIEW_DESC* pDesc,
+								           ID3D11RenderTargetView** ppRTView);
 
 	//Create an array of 2D textures.
 	HRESULT
 		CreateTexture2D(const D3D11_TEXTURE2D_DESC* pDesc,
-						const D3D11_SUBRESOURCE_DATA* pInitialData,
-						ID3D11Texture2D** ppTexture2D);
+						        const D3D11_SUBRESOURCE_DATA* pInitialData,
+						        ID3D11Texture2D** ppTexture2D);
 
 	//Create a vertex-shader object from a compiled shader.
 	HRESULT
@@ -55,14 +55,14 @@ public:
 
 	//Creates a buffer (vertex buffer, index buffer, or shader-constant buffer).
 	HRESULT
-		CreateBuffer(	const D3D11_BUFFER_DESC* pDesc,
-						const D3D11_SUBRESOURCE_DATA* pInitialData,
-						ID3D11Buffer** ppBuffer);
+	CreateBuffer(const D3D11_BUFFER_DESC* pDesc,
+						   const D3D11_SUBRESOURCE_DATA* pInitialData,
+						   ID3D11Buffer** ppBuffer);
 
 	//Create a sampler-state object that encapsulates sampling information for a texture.
 	HRESULT
-		CreateSamplerState(	const D3D11_SAMPLER_DESC* pSamplerDesc,
-							ID3D11SamplerState** ppSamplerState);
+	CreateSamplerState(const D3D11_SAMPLER_DESC* pSamplerDesc,
+							       ID3D11SamplerState** ppSamplerState);
 
 
 
