@@ -20,4 +20,5 @@ public:
 	RECT m_rect;
 	unsigned int m_width;
 	unsigned int m_height;
+	LPCSTR m_windowName = "None";
 };

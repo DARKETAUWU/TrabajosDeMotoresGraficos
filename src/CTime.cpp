@@ -1,23 +1,23 @@
-#include "Time.h"
+#include "CTime.h"
 
 
 
-Time::Time()
+CTime::CTime()
 {
 	
 }
 
-Time::~Time()
+CTime::~CTime()
 {
 }
 
-void Time::init()
+void CTime::init()
 {
 	QueryPerformanceCounter(&m_lastTime);
 	QueryPerformanceFrequency(&m_timerFrecuency);
 }
 
-void Time::update()
+void CTime::update()
 {
 	QueryPerformanceCounter(&m_currentTime);
 	m_deltatime = (m_currentTime.QuadPart - m_lastTime.QuadPart) / (float)m_timerFrecuency.QuadPart;
@@ -25,10 +25,10 @@ void Time::update()
 	m_deltatime = min(m_deltatime, 0.1f);
 }
 
-void Time::render()
+void CTime::render()
 {
 }
 
-void Time::destroy()
+void CTime::destroy()
 {
 }

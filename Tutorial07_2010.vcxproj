@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -421,10 +421,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Commons.h" />
-    <ClInclude Include="include\DiviceContext.h" />
+    <ClInclude Include="include\DepthStencilView.h" />
+    <ClInclude Include="include\Device.h" />
+    <ClInclude Include="include\DeviceContext.h" />
+    <ClInclude Include="include\InputLayout.h" />
     <ClInclude Include="include\Prerequisites.h" />
+    <ClInclude Include="include\RenderTargetView.h" />
     <ClInclude Include="include\Resource.h" />
-    <ClInclude Include="include\Time.h" />
+    <ClInclude Include="include\SamplerState.h" />
+    <ClInclude Include="include\SwapChain.h" />
+    <ClInclude Include="include\Texture.h" />
+    <ClInclude Include="include\CTime.h" />
+    <ClInclude Include="include\Transform.h" />
+    <ClInclude Include="include\Viewport.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -433,9 +442,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\DiviceContext.cpp" />
-    <ClCompile Include="src\Time.cpp" />
+    <ClCompile Include="src\DepthStencilView.cpp" />
+    <ClCompile Include="src\Devicecpp.cpp" />
+    <ClCompile Include="src\DeviceContext.cpp" />
+    <ClCompile Include="src\InputLayout.cpp" />
+    <ClCompile Include="src\RenderTargetView.cpp" />
+    <ClCompile Include="src\SamplerState.cpp" />
+    <ClCompile Include="src\SwapChain.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\CTime.cpp" />
+    <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\Tutorial07.cpp" />
+    <ClCompile Include="src\Viewport.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

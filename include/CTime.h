@@ -5,11 +5,11 @@
 *  this class is in charge of provind a time variable that will be
 *  execute in the gameloop
 */
-class Time
+class CTime
 {
 public:
-	Time();
-	~Time();
+	CTime();
+	~CTime();
 	void init();
 	void update();
 	void render();

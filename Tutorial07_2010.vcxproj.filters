@@ -23,7 +23,7 @@
     <ClInclude Include="include\Resource.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Time.h">
+    <ClInclude Include="include\CTime.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Prerequisites.h">
@@ -35,7 +35,34 @@
     <ClInclude Include="include\Window.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\DiviceContext.h">
+    <ClInclude Include="include\DeviceContext.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Device.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DepthStencilView.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Texture.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\InputLayout.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderTargetView.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Transform.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SamplerState.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SwapChain.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Viewport.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -45,7 +72,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Time.cpp">
+    <ClCompile Include="src\CTime.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Tutorial07.cpp">
@@ -54,7 +81,34 @@
     <ClCompile Include="src\Window.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\DiviceContext.cpp">
+    <ClCompile Include="src\DeviceContext.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Devicecpp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DepthStencilView.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InputLayout.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderTargetView.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Transform.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SamplerState.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SwapChain.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Viewport.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

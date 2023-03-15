@@ -1,11 +1,12 @@
 #pragma once
+//The Prerequisites library is called, which has several libraries that will be used throughout the project.
 #include "Prerequisites.h"
 
-class DiviceContext
+class DeviceContext
 {
 public:
-	DiviceContext() = default;
-	~DiviceContext() {
+	DeviceContext() = default;
+	~DeviceContext() {
 		SAFE_RELEASE(m_deviceContext);
 	};
 

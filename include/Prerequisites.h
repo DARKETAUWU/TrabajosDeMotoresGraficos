@@ -1,16 +1,26 @@
 #pragma once
 //archivo administrador de recursos
+//std lib
+#include <vector>
+#include <iostream>
+#include <sstream>
+
+//Windows
 #include <windows.h> 
+
+//External Lib
 #include <d3d11.h>
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <xnamath.h>
+
+//Internal Includes
 #include "resource.h"
-#include <vector>
-#include <string.h>
-#include "Time.h"
+
+
+
 #define WINDOWS
-#define DBOUT( s )            \
+#define WARNING( s )            \
 {                             \
    std::wostringstream os_;    \
    os_ << s;                   \
