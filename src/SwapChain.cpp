@@ -48,8 +48,7 @@ SwapChain::init(Device& device, DeviceContext& deviceContext, Texture& backBuffe
 
 	HRESULT hr = S_OK;
 
-	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-	{
+	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++){
 		m_driverType = driverTypes[driverTypeIndex];
 		hr = D3D11CreateDeviceAndSwapChain(nullptr,
 			m_driverType,
@@ -82,23 +81,19 @@ SwapChain::init(Device& device, DeviceContext& deviceContext, Texture& backBuffe
 }
 
 void
-SwapChain::update()
-{
+SwapChain::update(){
 }
 
 void
-SwapChain::render()
-{
+SwapChain::render(){
 }
 
 void
-SwapChain::destroy()
-{
+SwapChain::destroy(){
 	SAFE_RELEASE(m_swapChain);
 }
 
 void
-SwapChain::present()
-{
+SwapChain::present(){
 	m_swapChain->Present(0, 0);
 }

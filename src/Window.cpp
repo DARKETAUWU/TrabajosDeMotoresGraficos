@@ -9,8 +9,8 @@ Window::~Window() {
 }
 
 HRESULT
-Window::init(HINSTANCE hInstance, int nCmdShow, WNDPROC wndproc)
-{
+Window::init(HINSTANCE hInstance, int nCmdShow, WNDPROC wndproc){
+
     // Register class
     WNDCLASSEX wcex; 
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -46,15 +46,17 @@ Window::init(HINSTANCE hInstance, int nCmdShow, WNDPROC wndproc)
     return S_OK;
 }
 
-void Window::update()
-{
+void 
+Window::update(){
 
 }
 
-void Window::render() {
+void 
+Window::render() {
 
 }
 
-void Window::destroy() {
+void 
+Window::destroy() {
 
 }

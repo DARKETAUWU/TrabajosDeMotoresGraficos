@@ -3,21 +3,25 @@
 #include "Prerequisites.h"
 
 class
-	Device {
+Device{
 public:
 	Device() = default;
 	~Device() { SAFE_RELEASE(m_device) };
 
-	void init();
-	void update();
-	void render();
-	void destroy();
+	void 
+	init();
+	void 
+	update();
+	void 
+	render();
+	void 
+	destroy();
 
 	//Create a depth-stencil view for accessing resource data.
 	HRESULT
   CreateDepthStencilView(	ID3D11Resource* pResourse,
-													const D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc,
-													ID3D11DepthStencilView** ppDepthStencilView);
+												const D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc,
+												ID3D11DepthStencilView** ppDepthStencilView);
 
 	HRESULT
 	CreateRenderTargetView(	ID3D11Resource* pResource,
@@ -65,6 +69,6 @@ public:
 							       ID3D11SamplerState** ppSamplerState);
 
 
-
+public:
 	ID3D11Device* m_device = nullptr;
 };

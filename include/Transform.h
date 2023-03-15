@@ -9,13 +9,13 @@ public:
 	~Transform() {};
 
 	void
-		init();
+	init();
 	void
-		update();
+	update();
 	void
-		render();
+	render();
 	void
-		destroy();
+	destroy();
 public:
 	
 	Vector3 Posicion3D;

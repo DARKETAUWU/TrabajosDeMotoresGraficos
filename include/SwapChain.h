@@ -4,20 +4,20 @@
 
 
 class
-	Device;
+Device;
 
 
 class
-	DeviceContext;
+DeviceContext;
 
 class
-	Window;
-
+Window;
 
 class
-	Texture;
+Texture;
 
-class SwapChain {
+class 
+SwapChain {
 
 public:
 	SwapChain() = default;
@@ -25,23 +25,23 @@ public:
 
 	// Create Direct3D device
 	void
-		init(Device& device,
+	init(Device& device,
 			DeviceContext& deviceContext,
 			Texture& backBuffer,
 			Window window);
 
 	void
-		update();
+	update();
 
 	void
-		render();
+	render();
 
 	void
-		destroy();
+	destroy();
 
 	//Present, that we present in the screen
 	void
-		present();
+	present();
 
 
 private:

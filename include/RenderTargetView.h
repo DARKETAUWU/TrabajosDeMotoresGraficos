@@ -9,7 +9,7 @@ class
 	Texture;
 
 class 
-	RenderTargetView {
+RenderTargetView {
 public: 
 	RenderTargetView() = default;
 	~RenderTargetView() {};
@@ -18,16 +18,16 @@ public:
 	//can be accessed during rendering.
 	//Create the Render Target View, it needs a device & backBuffer
 	void
-		init(Device device, Texture backBuffer, DXGI_FORMAT Format);
+	init(Device device, Texture backBuffer, DXGI_FORMAT Format);
 	
 	void 
-		update();
+	update();
 	
 	void 
-		render();
+	render();
 	
 	void 
-		destroy();
+	destroy();
 
 public:
 	ID3D11RenderTargetView* m_renderTargetView = nullptr;

@@ -1,6 +1,7 @@
 #include "Viewport.h"
 #include "Window.h"
 
+//refers to the part of the document you are viewing, which is currently visible in your window
 void
 Viewport::init(Window window) {
 
@@ -8,7 +9,7 @@ Viewport::init(Window window) {
         WARNING("ERROR: Viewport::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR Window window] \n");
         exit(1);
     }
-
+    
     m_viewport.Width = (FLOAT)window.m_width;// width;
     m_viewport.Height = (FLOAT)window.m_height; // height;
     m_viewport.MinDepth = 0.0f;

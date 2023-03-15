@@ -34,16 +34,14 @@ DeviceContext::PSSetSamplers(unsigned int StartSlot,
 void
 DeviceContext::PSSetShaderResources(unsigned int StartSlot,
 	unsigned int NumViews,
-	ID3D11ShaderResourceView* const* ppShaderResourceViews) 
-{
+	ID3D11ShaderResourceView* const* ppShaderResourceViews) {
 	m_deviceContext->PSSetShaderResources(StartSlot, NumViews, ppShaderResourceViews);
 }
 
 void
 DeviceContext::PSSetConstantBuffers(	unsigned int StartSlot,
 										unsigned int NumBuffers,
-										ID3D11Buffer* const* ppConstantBuffers) 
-{
+										ID3D11Buffer* const* ppConstantBuffers) {
 	m_deviceContext->PSSetConstantBuffers(	StartSlot, 
 											NumBuffers, 
 											ppConstantBuffers);
@@ -52,8 +50,7 @@ DeviceContext::PSSetConstantBuffers(	unsigned int StartSlot,
 void
 DeviceContext::PSSetShader(	ID3D11PixelShader* pPixelShader,
 							ID3D11ClassInstance* const* ppClassInstances,
-							unsigned int NumClassInstances)
-{
+							unsigned int NumClassInstances){
 	m_deviceContext->PSSetShader(	pPixelShader, 
 									ppClassInstances, 
 									NumClassInstances);
@@ -62,8 +59,7 @@ DeviceContext::PSSetShader(	ID3D11PixelShader* pPixelShader,
 void
 DeviceContext::VSSetConstantBuffers(unsigned int StartSlot,
 									unsigned int NumBuffers,
-									ID3D11Buffer* const* ppConstantBuffers)
-{
+									ID3D11Buffer* const* ppConstantBuffers){
 	m_deviceContext->VSSetConstantBuffers(	StartSlot, 
 											NumBuffers, 
 											ppConstantBuffers);
@@ -72,8 +68,7 @@ DeviceContext::VSSetConstantBuffers(unsigned int StartSlot,
 void
 DeviceContext::VSSetShader(	ID3D11VertexShader* pVertexShader,
 							ID3D11ClassInstance* const* ppClassInstances,
-							unsigned int NumClassInstances) 
-{
+							unsigned int NumClassInstances) {
 	m_deviceContext->VSSetShader(pVertexShader, 
 								ppClassInstances, 
 							    NumClassInstances);
@@ -83,8 +78,7 @@ void
 DeviceContext::ClearDepthStencilView(	ID3D11DepthStencilView* pDepthStencilView,
 										unsigned int ClearFlags,
 										float Depth,
-										unsigned int Stencil) 
-{
+										unsigned int Stencil) {
 	m_deviceContext->ClearDepthStencilView(	pDepthStencilView, 
 											ClearFlags, 
 											Depth, 
@@ -93,8 +87,7 @@ DeviceContext::ClearDepthStencilView(	ID3D11DepthStencilView* pDepthStencilView,
 
 void
 DeviceContext::ClearRenderTargetView(	ID3D11RenderTargetView* pRenderTargetView,
-										const float ColorRGBA[4]) 
-{
+										const float ColorRGBA[4]) {
 	m_deviceContext->ClearRenderTargetView(pRenderTargetView, ColorRGBA);
 }
 

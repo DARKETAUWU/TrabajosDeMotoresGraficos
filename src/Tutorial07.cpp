@@ -77,8 +77,7 @@ int
 WINAPI wWinMain( HINSTANCE hInstance, 
                  HINSTANCE hPrevInstance, 
                  LPWSTR lpCmdLine, 
-                 int nCmdShow )
-{
+                 int nCmdShow ){
     UNREFERENCED_PARAMETER( hPrevInstance );
     UNREFERENCED_PARAMETER( lpCmdLine );
 
@@ -88,8 +87,7 @@ WINAPI wWinMain( HINSTANCE hInstance,
         return 0;
 
 
-    if( FAILED( InitDevice() ) )
-    {
+    if( FAILED( InitDevice() ) ){
         //CleanupDevice();
         destroy();
         return 0;
@@ -99,15 +97,12 @@ WINAPI wWinMain( HINSTANCE hInstance,
 
     // Main message loop
     MSG msg = {0};
-    while( WM_QUIT != msg.message )
-    {
-        if( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) )
-        {
+    while( WM_QUIT != msg.message ){
+        if( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) ){
             TranslateMessage( &msg );
             DispatchMessage( &msg );
         }
-        else
-        {
+        else{
            g_time.update();
            update();
            Render();
@@ -126,8 +121,7 @@ HRESULT
 CompileShaderFromFile(  char* szFileName, 
                         LPCSTR szEntryPoint, 
                         LPCSTR szShaderModel, 
-                        ID3DBlob** ppBlobOut )
-{
+                        ID3DBlob** ppBlobOut ){
     HRESULT hr = S_OK;
 
     DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
@@ -151,8 +145,7 @@ CompileShaderFromFile(  char* szFileName,
                                 ppBlobOut, 
                                 &pErrorBlob, 
                                 nullptr);
-    if (FAILED(hr)) 
-    {
+    if (FAILED(hr)) {
         if (pErrorBlob != nullptr)
             OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
         if (pErrorBlob) pErrorBlob->Release();
@@ -165,8 +158,7 @@ CompileShaderFromFile(  char* szFileName,
 
 
 HRESULT 
-InitDevice()
-{
+InitDevice(){
     HRESULT hr = S_OK;
 
     g_swapChain.init(g_device, g_deviceContext, g_backBuffer, g_window);
@@ -195,24 +187,20 @@ InitDevice()
     // Compile the vertex shader
     ID3DBlob* pVSBlob = nullptr;
     hr = CompileShaderFromFile( "Tutorial07.fx", "VS", "vs_4_0", &pVSBlob );
-    if( FAILED( hr ) )
-    {
+    if( FAILED( hr ) ){
         MessageBox( nullptr,
                     "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK );
         return hr;
     }
 
     hr = g_device.CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &g_pVertexShader);
-    if (FAILED(hr))
-    {
+    if (FAILED(hr)){
         pVSBlob->Release(); 
         return hr;
     }
 
     // Define the input layout
-    D3D11_INPUT_ELEMENT_DESC layout[] =
-    {
-        { 
+    D3D11_INPUT_ELEMENT_DESC layout[] = { { 
             "POSITION",                   //Semantic Name  -> Identificador para la estructura en el shader
             0,                              //Semantic Index -> En caso de tener mas de un Semantic Name igual
             DXGI_FORMAT_R32G32B32_FLOAT,    //Format         -> Clasificador para el tipo de datos
@@ -220,8 +208,7 @@ InitDevice()
             D3D11_APPEND_ALIGNED_ELEMENT,   //AlignedByOffset  -> Administra el espacio en memoria y su ajuste idoneo
             D3D11_INPUT_PER_VERTEX_DATA,    //InputSlotClassAt -> Se configura que tipo de dato se está asignando
             0                               //InstanceDataRate -> Actualización de datos
-        },
-        { 
+        },{ 
             "TEXCOORD", 
              0, 
              DXGI_FORMAT_R32G32_FLOAT, 
@@ -269,8 +256,7 @@ InitDevice()
     // Compile the pixel shader
     ID3DBlob* pPSBlob = nullptr;
     hr = CompileShaderFromFile( "Tutorial07.fx", "PS", "ps_4_0", &pPSBlob );
-    if( FAILED( hr ) )
-    {
+    if( FAILED( hr ) ){
         MessageBox( nullptr,
                     "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK );
         return hr;
@@ -433,15 +419,13 @@ InitDevice()
 }
 
 
-void update()
-{
+void 
+update(){
 
-    if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
-    {
+    if (g_driverType == D3D_DRIVER_TYPE_REFERENCE){
         g_time.m_deltatime += (float)XM_PI * 0.0125f;
     }
-    else
-    {
+    else{
         static unsigned int dwTimeStart = 0;
         unsigned int dwTimeCur = GetTickCount();
         if (dwTimeStart == 0)
@@ -466,8 +450,8 @@ void update()
 
 }
 
-void destroy()
-{
+void 
+destroy(){
     g_deviceContext.destroy();
     g_samplerState.destroy();
     g_ModelTexture.destroy();

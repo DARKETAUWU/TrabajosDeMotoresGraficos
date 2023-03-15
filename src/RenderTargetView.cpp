@@ -5,8 +5,7 @@
 void 
 RenderTargetView::init(	Device device, 
 						Texture backBuffer, 
-						DXGI_FORMAT Format)
-{
+						DXGI_FORMAT Format){
 	if (device.m_device == nullptr) {
 		WARNING("ERROR: RenderTargetView::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR Device device] \n");
 		exit(1);
@@ -24,17 +23,14 @@ RenderTargetView::init(	Device device,
 }
 
 void 
-RenderTargetView::update()
-{
+RenderTargetView::update(){
 }
 
 void 
-RenderTargetView::render()
-{
+RenderTargetView::render(){
 }
 
 void 
-RenderTargetView::destroy()
-{
+RenderTargetView::destroy(){
 	SAFE_RELEASE(m_renderTargetView);
 }

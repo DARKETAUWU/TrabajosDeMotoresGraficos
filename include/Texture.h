@@ -4,33 +4,32 @@
 
 //Call to the Class is begin used in cpp (Device)
 class
-	Device;
+Device;
 
 class
-	Texture
-{
+Texture{
 public:
 	Texture() = default;
 	~Texture();
 
 	void
-		init(Device device, std::string textureName);
+	init(Device device, std::string textureName);
 
 	void
-		init(Device device,
+	init(Device device,
 			unsigned int width,
 			unsigned int height,
 			DXGI_FORMAT Format,
 			unsigned int BindFlags);
 
 	void
-		update();
+	update();
 
 	void
-		render();
+	render();
 
 	void
-		destroy();
+	destroy();
 
 
 public:

@@ -6,23 +6,23 @@ class
 	Device;
 
 class 
-	SamplerState {
+SamplerState{
 public:
 	SamplerState() = default;
 	~SamplerState() {};
 
 	// Create the sample state, allow us to modify the dimensions of the texture
 	void
-		init(Device device);
+	init(Device device);
 
 	void
-		update();
+	update();
 
 	void
-		render();
+	render();
 
 	void
-		destroy();
+	destroy();
 
 public:
 	ID3D11SamplerState* m_sampler = nullptr;

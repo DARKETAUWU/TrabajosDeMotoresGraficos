@@ -14,16 +14,16 @@ public:
 
 	//Defines the dimensions of a viewport (width & height)
 	void
-		init(Window window);
+	init(Window window);
 
 	void
-		update();
+  update();
 
 	void
-		render();
+	render();
 
 	void
-		destroy();
+	destroy();
 
 public:
 	D3D11_VIEWPORT m_viewport;

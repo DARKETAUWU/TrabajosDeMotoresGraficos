@@ -2,22 +2,20 @@
 //The Prerequisites library is called, which has several libraries that will be used throughout the project.
 #include "Prerequisites.h"
 
-class DeviceContext
-{
+class 
+DeviceContext{
 public:
 	DeviceContext() = default;
-	~DeviceContext() {
-		SAFE_RELEASE(m_deviceContext);
-	};
+	~DeviceContext() { SAFE_RELEASE(m_deviceContext);};
 
 	void 
-		init();
+	init();
 	void 
-		update();
+	update();
 	void 
-		render();
+	render();
 	void 
-		destroy();
+	destroy();
 
 	//Bind one or more render targets atomically and the depth-stencil buffer to the output-merger stage.
 	void

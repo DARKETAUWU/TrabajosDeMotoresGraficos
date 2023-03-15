@@ -5,24 +5,23 @@ class
 	Device;
 
 class
-DepthStencilView
-{
+DepthStencilView{
 public:
 	DepthStencilView() = default;
 	~DepthStencilView() { SAFE_RELEASE(m_pDepthStencilView) };
 
 	// Create the depth stencil view
 	void
-		init(Device device, ID3D11Resource* depthStencil, DXGI_FORMAT Format);
+	init(Device device, ID3D11Resource* depthStencil, DXGI_FORMAT Format);
 
 	void
-		update();
+	update();
 
 	void
-		render();
+	render();
 
 	void
-		destroy();
+	destroy();
 
 public:
 	ID3D11DepthStencilView* m_pDepthStencilView = nullptr;
