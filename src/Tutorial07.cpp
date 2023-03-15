@@ -435,13 +435,23 @@ InitDevice()
 
 void update()
 {
+
+    if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
+    {
+        g_time.m_deltatime += (float)XM_PI * 0.0125f;
+    }
+    else
+    {
+        static unsigned int dwTimeStart = 0;
+        unsigned int dwTimeCur = GetTickCount();
+        if (dwTimeStart == 0)
+            dwTimeStart = dwTimeCur;
+        g_time.m_deltatime = (dwTimeCur - dwTimeStart) / 1000.0f;
+    }
     g_transform.m_fScaleNum += 0.0002f;
     
-    g_World = XMMatrixScaling(.5f, .5f, .5f) *
-              XMMatrixRotationY  (g_time.m_deltatime) *
-              XMMatrixTranslation(g_transform.Posicion3D.x, 
-                                  g_transform.Posicion3D.y, 
-                                  g_transform.Posicion3D.z);
+
+    g_World = XMMatrixScaling(.5f, .5f, .5f) * XMMatrixRotationY(g_time.m_deltatime) * XMMatrixTranslation(g_transform.Posicion3D.x, g_transform.Posicion3D.y, g_transform.Posicion3D.z);
 
     // Update variables that change once per frame
     CBChangesEveryFrame cb;
@@ -538,18 +548,19 @@ CALLBACK WndProc(HWND hWnd,
                     g_transform.Posicion3D.y = 0;
                     g_transform.Posicion3D.z = 0;
                     break;
+                    //The 0 button changes its color
                 case '0':
                     g_vMeshColor = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
                     break;
-
+                    //The 1 button changes its color
                 case '1':
                     g_vMeshColor = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
                     break;
-
+                    //The 2 button changes its color
                 case '2':
                     g_vMeshColor = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
                     break;
-
+                    //The 3 button changes its color
                 case '3':
                     g_vMeshColor = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
                     break;
@@ -572,42 +583,36 @@ void
 Render()
 {
  
-    //
-    // Clear the back buffer
-    //
-    float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+    
+    float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; 
+
+    //Set all the elements in a render target to one value.
     g_deviceContext.ClearRenderTargetView(g_renderTargetView.m_renderTargetView, ClearColor);
-
-    //
-    // Clear the depth buffer to 1.0 (max depth)
-    //
-    g_deviceContext.ClearDepthStencilView(g_depthStencilView.m_pDepthStencilView,
-        D3D11_CLEAR_DEPTH, 1.0f, 0);
-
+    //Clears the depth-stencil resource.
+    g_deviceContext.ClearDepthStencilView(g_depthStencilView.m_pDepthStencilView,D3D11_CLEAR_DEPTH, 1.0f, 0);
+    //Bind one or more render targets atomically and the depth-stencil buffer to the output-merger stage.
     g_deviceContext.OMSetRenderTargets(1, &g_renderTargetView.m_renderTargetView, g_depthStencilView.m_pDepthStencilView);
+    //Bind an array of viewports to the rasterizer stage of the pipeline.
     g_deviceContext.RSSetViewports(1, &g_viewport.m_viewport);
-
-
     // Set the input layout
     g_deviceContext.IASetInputLayout(g_InputLayout.m_inputlayout);
-    //
-    // Render the cube
-    //
+    //Set a vertex shader to the device.
     g_deviceContext.VSSetShader(g_pVertexShader, nullptr, 0);
+    //Sets the constant buffers used by the vertex shader pipeline stage.
     g_deviceContext.VSSetConstantBuffers(0, 1, &g_Camera);
-
+    //Sets the constant buffers used by the vertex shader pipeline stage.
     g_deviceContext.VSSetConstantBuffers(1, 1, &g_pCBChangesEveryFrame);
+    //Sets a pixel shader to the device.
     g_deviceContext.PSSetShader(g_pPixelShader, nullptr, 0);
-
+    //Sets the constant buffers used by the pixel shader pipeline stage.
     g_deviceContext.PSSetConstantBuffers(1, 1, &g_pCBChangesEveryFrame);
+    //Bind an array of shader resources to the pixel shader stage.
     g_deviceContext.PSSetShaderResources(0, 1, &g_ModelTexture.m_textureFromImg);
-
+    //Set an array of sampler states to the pixel shader pipeline stage.
     g_deviceContext.PSSetSamplers(0, 1, &g_samplerState.m_sampler);
+    //Draw indexed, non-instanced primitives.
     g_deviceContext.DrawIndexed(36, 0, 0);
-
-    //
     // Present our back buffer to our front buffer
-    //
     g_swapChain.present();
 }
 
