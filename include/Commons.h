@@ -1,23 +1,23 @@
 #pragma once
 
-struct SimpleVertex
-{
+struct 
+SimpleVertex{
+
     XMFLOAT3 Pos;
     XMFLOAT2 Tex;
 
 };
 
+struct 
+CBChangesEveryFrame{
 
-
-struct CBChangesEveryFrame
-{
     XMMATRIX mWorld;
     XMFLOAT4 vMeshColor;
 };
-struct Vector3
-    //we put a vector structure to help us move the cube,
-    //we initialize everything to 0 so that there is no error
-{
+
+//we put a vector structure to help us move the cube,
+//we initialize everything to 0 so that there is no error
+struct Vector3{
     float x = 0.0f;
     float y = 0.0f;
     float z = 0.0f;
