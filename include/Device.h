@@ -15,13 +15,13 @@ public:
 
 	//Create a depth-stencil view for accessing resource data.
 	HRESULT
-		CreateDepthStencilView(	ID3D11Resource* pResourse,
-								const D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc,
-								ID3D11DepthStencilView** ppDepthStencilView);
+        CreateDepthStencilView(	ID3D11Resource* pResourse,
+			        const D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc,
+			        ID3D11DepthStencilView** ppDepthStencilView);
 
 	HRESULT
-		CreateRenderTargetView(ID3D11Resource* pResource,
-								           const D3D11_RENDER_TARGET_VIEW_DESC* pDesc,
+        CreateRenderTargetView(ID3D11Resource* pResource,
+		const D3D11_RENDER_TARGET_VIEW_DESC* pDesc,
 								           ID3D11RenderTargetView** ppRTView);
 
 	//Create an array of 2D textures.
