@@ -21,10 +21,10 @@ public:
 	//Load the texture with the divice variable, if height and width, the format it occupies
 	void
 	init(Device device,
-			unsigned int width,
-			unsigned int height,
-			DXGI_FORMAT Format,
-			unsigned int BindFlags);
+	     unsigned int width,
+	     unsigned int height,
+	     DXGI_FORMAT Format,
+	     unsigned int BindFlags);
 
 	void
 	update();
