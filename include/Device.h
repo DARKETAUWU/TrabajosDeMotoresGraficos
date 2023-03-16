@@ -23,6 +23,7 @@ public:
 				const D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc,
 				ID3D11DepthStencilView** ppDepthStencilView);
 
+	//Creates a render-target view for accessing resource data.
 	HRESULT
 	CreateRenderTargetView(	ID3D11Resource* pResource,
 				const D3D11_RENDER_TARGET_VIEW_DESC* pDesc,

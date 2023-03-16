@@ -30,6 +30,7 @@ public:
 	destroy();
 
 public:
+	//A render-target-view interface identifies the render-target subresources that can be accessed during rendering.
 	ID3D11RenderTargetView* m_renderTargetView = nullptr;
 	
 };

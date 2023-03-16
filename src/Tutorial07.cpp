@@ -409,12 +409,7 @@ InitDevice(){
     cam.mView = XMMatrixTranspose(g_View);
     cam.mProjection = XMMatrixTranspose(g_Projection);
  
-    // The vector x is initialized to 0
-    g_transform.Posicion3D.x = 0;
-    // The vector y is initialized to 0
-    g_transform.Posicion3D.y = 0;
-    // The vector z is initialized to 0
-    g_transform.Posicion3D.z = 0;
+    
     return S_OK;
 }
 
@@ -432,7 +427,7 @@ update(){
             dwTimeStart = dwTimeCur;
         g_time.m_deltatime = (dwTimeCur - dwTimeStart) / 1000.0f;
     }
-    g_transform.m_fScaleNum += 0.0002f;
+    g_transform.m_ScaleNum += 0.0002f;
     
 
     g_World = XMMatrixScaling(.5f, .5f, .5f) * XMMatrixRotationY(g_time.m_deltatime) * XMMatrixTranslation(g_transform.Posicion3D.x, g_transform.Posicion3D.y, g_transform.Posicion3D.z);

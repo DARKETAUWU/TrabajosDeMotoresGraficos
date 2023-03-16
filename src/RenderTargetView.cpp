@@ -1,7 +1,13 @@
+//The RenderTargetView library is called, which has several libraries that will be used throughout the project.
 #include "RenderTargetView.h"
+//The Device library is called, which has several libraries that will be used throughout the project.
 #include "Device.h"
+//The Texture library is called, which has several libraries that will be used throughout the project.
 #include "Texture.h"
 
+//A render-target-view interface identifies the render-target subresources that 
+	//can be accessed during rendering.
+	//Create the Render Target View, it needs a device & backBuffer
 void 
 RenderTargetView::init(	Device device, 
 						Texture backBuffer, 
@@ -25,6 +31,7 @@ RenderTargetView::init(	Device device,
 void 
 RenderTargetView::update(){
 }
+
 
 void 
 RenderTargetView::render(){

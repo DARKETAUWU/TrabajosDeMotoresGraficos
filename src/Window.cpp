@@ -1,3 +1,4 @@
+//The Window library is called, which has several libraries that will be used throughout the project.
 #include "Window.h"
 
 Window::Window() {
@@ -8,10 +9,11 @@ Window::~Window() {
 
 }
 
+//Initializes a thread to use Windows Runtime APIs.
 HRESULT
 Window::init(HINSTANCE hInstance, int nCmdShow, WNDPROC wndproc){
 
-    // Register class
+    //Contains window class information. It is used with the RegisterClassEx and GetClassInfoEx  functions
     WNDCLASSEX wcex; 
     wcex.cbSize = sizeof(WNDCLASSEX);
     wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -29,7 +31,6 @@ Window::init(HINSTANCE hInstance, int nCmdShow, WNDPROC wndproc){
         return E_FAIL;
 
     // Create window
-    
     RECT rc = { 0, 0, 640, 480 };
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
     m_hWnd = CreateWindow("TutorialWindowClass", "Direct3D 11 Tutorial 7", WS_OVERLAPPEDWINDOW,
@@ -38,8 +39,10 @@ Window::init(HINSTANCE hInstance, int nCmdShow, WNDPROC wndproc){
     if (!m_hWnd)
         return E_FAIL;
 
+    //Controls how the window is to be shown.
     ShowWindow(m_hWnd, nCmdShow);
 
+    //Retrieves the coordinates of a window's client area. The client coordinates specify the upper-left and lower-right corners of the client area.
     GetClientRect(m_hWnd, &m_rect);
     m_width = m_rect.right - m_rect.left;
     m_height = m_rect.bottom - m_rect.top;

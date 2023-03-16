@@ -1,6 +1,9 @@
+//The SamplerState library is called, which has several libraries that will be used throughout the project.
 #include "SamplerState.h"
+//The Device library is called, which has several libraries that will be used throughout the project.
 #include "Device.h"
 
+// Create the sample state, allow us to modify the dimensions of the texture
 void
 SamplerState::init(Device device) {
 

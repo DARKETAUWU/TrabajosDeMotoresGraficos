@@ -4,8 +4,11 @@
 #include "Window.h"
 #include "Texture.h"
 
+//This topic show how to create a swap chain that encapsulates two or more buffers that are used for rendering and display.
 void
 SwapChain::init(Device& device, DeviceContext& deviceContext, Texture& backBuffer, Window window) {
+	
+	//If the window is empty, the following warning will be displayed
 	if (window.m_hWnd == nullptr) {
 		WARNING("ERROR: SwapChain::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR Window window] \n");
 		exit(1);
@@ -32,6 +35,7 @@ SwapChain::init(Device& device, DeviceContext& deviceContext, Texture& backBuffe
 
 	unsigned int numFeatureLevels = ARRAYSIZE(featureLevels);
 
+	//Describes a swap chain.
 	DXGI_SWAP_CHAIN_DESC sd;
 	memset(&sd, 0, sizeof(sd));
 	sd.BufferCount = 1;
@@ -67,6 +71,7 @@ SwapChain::init(Device& device, DeviceContext& deviceContext, Texture& backBuffe
 			break;
 	}
 
+	//If the hr fails, the following message will be displayed
 	if (FAILED(hr)) {
 		WARNING("ERROR: SwapChain::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR D3D11CreateDeviceAndSwapChain()] \n");
 		exit(1);
@@ -88,6 +93,7 @@ void
 SwapChain::render(){
 }
 
+//This function releases the pointer ppT and sets it equal to NULL.
 void
 SwapChain::destroy(){
 	SAFE_RELEASE(m_swapChain);
@@ -95,5 +101,6 @@ SwapChain::destroy(){
 
 void
 SwapChain::present(){
+	//A swap chain is a collection of buffers that are used for displaying frames to the user.
 	m_swapChain->Present(0, 0);
 }

@@ -6,7 +6,8 @@ class
 DeviceContext{
 public:
 	DeviceContext() = default;
-	~DeviceContext() { SAFE_RELEASE(m_deviceContext);};
+	//This function releases the pointer ppT and sets it equal to NULL.
+	~DeviceContext() { SAFE_RELEASE(m_deviceContext); };
 
 	void 
 	init();

@@ -1,4 +1,5 @@
 #pragma once
+//The Windows library is called, which has several libraries that will be used throughout the project.
 #include <Windows.h>
 
 /*

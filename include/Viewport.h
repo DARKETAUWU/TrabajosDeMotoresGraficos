@@ -2,17 +2,18 @@
 //The Prerequisites library is called, which has several libraries that will be used throughout the project.
 #include "Prerequisites.h"
 
-//Call to the Class is begin used in cpp (Window)
+//The Window class is called to use its variables
 class
 	Window;
 
+//Create the camera's point of view class
 class
 	Viewport {
 public:
 	Viewport() = default;
 	~Viewport() {};
 
-	//Defines the dimensions of a viewport (width & height)
+	//Defines the dimensions of a viewport 
 	void
 	init(Window window);
 
@@ -26,5 +27,6 @@ public:
 	destroy();
 
 public:
+	//Defines the dimensions of a viewport.
 	D3D11_VIEWPORT m_viewport;
 };

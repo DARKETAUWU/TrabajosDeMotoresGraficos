@@ -1,8 +1,10 @@
 #pragma once
+//The Prerequisites library is called, which has several libraries that will be used throughout the project.
 #include "Prerequisites.h"
+//The Commons library is called, which has several libraries that will be used throughout the project.
 #include "Commons.h"
 
-//Call to the Class is begin used in cpp (Device)
+//The Device class is called to use its variables
 class
 Device;
 
@@ -12,9 +14,11 @@ public:
 	Texture() = default;
 	~Texture();
 
+	//Load all texture processes
 	void
 	init(Device device, std::string textureName);
 
+	//Load the texture with the divice variable, if height and width, the format it occupies
 	void
 	init(Device device,
 			unsigned int width,

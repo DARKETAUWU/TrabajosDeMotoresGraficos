@@ -1,6 +1,9 @@
+//The InputLayout library is called, which has several libraries that will be used throughout the project.
 #include "InputLayout.h"
+//The Device library is called, which has several libraries that will be used throughout the project.
 #include "Device.h"
 
+//The init class is initialized with the necessary variables to be able to use the input-layout
 void 
 InputLayout::init(	Device device,
 					std::vector<D3D11_INPUT_ELEMENT_DESC> Layout,
