@@ -29,8 +29,8 @@ Device::render()
 //Create a depth - stencil view for accessing resource data.
 HRESULT
 Device::CreateDepthStencilView(	ID3D11Resource* pResource,
-								const D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc,
-								ID3D11DepthStencilView** ppDepthStencilView) {
+				const D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc,
+				ID3D11DepthStencilView** ppDepthStencilView) {
 	HRESULT hr = S_OK;
 
 	if (pResource == nullptr) {
@@ -53,8 +53,8 @@ Device::CreateDepthStencilView(	ID3D11Resource* pResource,
 //Creates a render-target view for accessing resource data.
 HRESULT
 Device::CreateRenderTargetView(	ID3D11Resource* pResource,
-								const D3D11_RENDER_TARGET_VIEW_DESC* pDesc,
-								ID3D11RenderTargetView** ppRTView) {
+				const D3D11_RENDER_TARGET_VIEW_DESC* pDesc,
+				ID3D11RenderTargetView** ppRTView) {
 	HRESULT hr = S_OK;
 
 	if (pResource == nullptr) {
@@ -75,9 +75,9 @@ Device::CreateRenderTargetView(	ID3D11Resource* pResource,
 
 //Create an array of 2D textures.
 HRESULT
-Device::CreateTexture2D(	const D3D11_TEXTURE2D_DESC* pDesc,
-							const D3D11_SUBRESOURCE_DATA* pInitialData,
-							ID3D11Texture2D** ppTexture2D) {
+Device::CreateTexture2D(const D3D11_TEXTURE2D_DESC* pDesc,
+			const D3D11_SUBRESOURCE_DATA* pInitialData,
+			ID3D11Texture2D** ppTexture2D) {
 	HRESULT hr = S_OK;
 
 	if (pDesc == nullptr) {
@@ -98,10 +98,10 @@ Device::CreateTexture2D(	const D3D11_TEXTURE2D_DESC* pDesc,
 
 //Create a vertex-shader object from a compiled shader.
 HRESULT
-Device::CreateVertexShader(	const void* pShaderBytecode,
-							unsigned int BytecodeLength,
-							ID3D11ClassLinkage* pClassLinkage,
-							ID3D11VertexShader** ppVertexShader) {
+Device::CreateVertexShader(const void* pShaderBytecode,
+			   unsigned int BytecodeLength,
+			   ID3D11ClassLinkage* pClassLinkage,
+			   ID3D11VertexShader** ppVertexShader) {
 	HRESULT hr = S_OK;
 
 	if (pShaderBytecode == nullptr) {
@@ -123,11 +123,11 @@ Device::CreateVertexShader(	const void* pShaderBytecode,
 //Create an input-layout object to describe the input-buffer data for the 
 //input-assembler stage.
 HRESULT
-Device::CreateInputLayout(	const D3D11_INPUT_ELEMENT_DESC* pInputElementDescs,
-							unsigned int NumElements,
-							const void* pShaderBytecodeWithInputSignature,
-							unsigned int BytecodeLength,
-							ID3D11InputLayout** ppInputLayout) {
+Device::CreateInputLayout(const D3D11_INPUT_ELEMENT_DESC* pInputElementDescs,
+			  unsigned int NumElements,
+			  const void* pShaderBytecodeWithInputSignature,
+			  unsigned int BytecodeLength,
+			  ID3D11InputLayout** ppInputLayout) {
 	HRESULT hr = S_OK;
 
 	if (pInputElementDescs == nullptr) {
@@ -154,10 +154,10 @@ Device::CreateInputLayout(	const D3D11_INPUT_ELEMENT_DESC* pInputElementDescs,
 
 //Create a pixel shader.
 HRESULT
-Device::CreatePixelShader(	const void* pShaderBytecode,
-							unsigned int BytecodeLength,
-							ID3D11ClassLinkage* pClassLinkage,
-							ID3D11PixelShader** ppPixelShader) {
+Device::CreatePixelShader(const void* pShaderBytecode,
+			  unsigned int BytecodeLength,
+			  ID3D11ClassLinkage* pClassLinkage,
+			  ID3D11PixelShader** ppPixelShader) {
 	HRESULT hr;
 
 	if (pShaderBytecode == nullptr) {
@@ -178,9 +178,9 @@ Device::CreatePixelShader(	const void* pShaderBytecode,
 
 //Creates a buffer (vertex buffer, index buffer, or shader-constant buffer).
 HRESULT
-Device::CreateBuffer(	const D3D11_BUFFER_DESC* pDesc,
-						const D3D11_SUBRESOURCE_DATA* pInitialData,
-						ID3D11Buffer** ppBuffer) {
+Device::CreateBuffer(const D3D11_BUFFER_DESC* pDesc,
+		     const D3D11_SUBRESOURCE_DATA* pInitialData,
+		     ID3D11Buffer** ppBuffer) {
 	HRESULT hr;
 
 	if (pDesc == nullptr){
@@ -201,8 +201,8 @@ Device::CreateBuffer(	const D3D11_BUFFER_DESC* pDesc,
 
 //Create a sampler-state object that encapsulates sampling information for a texture.
 HRESULT
-Device::CreateSamplerState(	const D3D11_SAMPLER_DESC* pSamplerDesc,
-							ID3D11SamplerState** ppSamplerState) {
+Device::CreateSamplerState(const D3D11_SAMPLER_DESC* pSamplerDesc,
+			   ID3D11SamplerState** ppSamplerState) {
 	HRESULT hr;
 
 	if (pSamplerDesc == nullptr) {
