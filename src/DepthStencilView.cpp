@@ -6,8 +6,8 @@
 //Create a depth stencil view to access the resource data.
 void
 DepthStencilView::init(Device device,
-										ID3D11Resource* depthStencil,
-	DXGI_FORMAT Format) {
+		       ID3D11Resource* depthStencil,
+	               DXGI_FORMAT Format) {
 	//In the event that the device is empty, a warning will be shown asking us to check the device
 	if (device.m_device == nullptr) {
 		WARNING("ERROR: DepthStencilView::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR Device device] \n");
