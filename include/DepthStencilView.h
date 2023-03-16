@@ -1,8 +1,10 @@
 #pragma once
+//The Prerequisites library is called, which has several libraries that will be used throughout the project.
 #include "Prerequisites.h"
 
+//The Device class is called to use its variables
 class
-	Device;
+Device;
 
 class
 DepthStencilView{
@@ -24,6 +26,7 @@ public:
 	destroy();
 
 public:
+	//A depth-stencil-view interface accesses a texture resource during depth-stencil testing
 	ID3D11DepthStencilView* m_pDepthStencilView = nullptr;
 
 };
