@@ -9,9 +9,9 @@
 	//can be accessed during rendering.
 	//Create the Render Target View, it needs a device & backBuffer
 void 
-RenderTargetView::init(	Device device, 
-						Texture backBuffer, 
-						DXGI_FORMAT Format){
+RenderTargetView::init(Device device, 
+		       Texture backBuffer, 
+		       DXGI_FORMAT Format){
 	if (device.m_device == nullptr) {
 		WARNING("ERROR: RenderTargetView::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR Device device] \n");
 		exit(1);
