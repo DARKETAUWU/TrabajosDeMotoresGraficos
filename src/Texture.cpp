@@ -34,11 +34,11 @@ Texture::init(Device device, std::string textureName) {
 
 	//Create a shader-resource view from a file.
 	hr = D3DX11CreateShaderResourceViewFromFile(device.m_device,
-		                                          textureName.c_str(),
-		                                          nullptr,
-		                                          nullptr,
-		                                          &m_textureFromImg,
-		                                          nullptr);
+		                                    textureName.c_str(),
+		                                    nullptr,
+		                                    nullptr,
+		                                    &m_textureFromImg,
+		                                    nullptr);
 	//In case of failure, the hr will show us that the creation of the resource is false and we must check the correct name of the texture
 	if (FAILED(hr)) {
 		WARNING("ERROR: Texture::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR correct texture name in Filepath] \n");
@@ -49,10 +49,10 @@ Texture::init(Device device, std::string textureName) {
 //Load the texture with the divice variable, if height and width, the format it occupies
 void
 Texture::init(	Device device,
-				        unsigned int width,
-				        unsigned int height,
-				        DXGI_FORMAT Format,
-				        unsigned int BindFlags) {
+	        unsigned int width,
+                unsigned int height,
+	        DXGI_FORMAT Format,
+	        unsigned int BindFlags) {
 	//In case of failure, it will show us the message to check the device
 	if (device.m_device == nullptr) {
 		WARNING("ERROR: Texture::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR Device device] \n");
