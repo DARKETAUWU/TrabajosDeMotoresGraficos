@@ -21,7 +21,7 @@ public:
 public:
 	
 	//The vector class is called with which we can adjust the vectors where the cube will move
-	Vector3 Posicion3D;
+	Vector3F Posicion3D;
 	//A variable is created with which the cube will be scaled
 	float m_ScaleNum;
 	//A variable is created with which the cube will be rotated

@@ -65,6 +65,21 @@
     <ClInclude Include="include\Viewport.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\ShaderProgram.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VertexBuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OBJLoader.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ModelLoaderh.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IndexBuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tutorial07.rc">
@@ -109,6 +124,18 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Viewport.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderProgram.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelLoader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IndexBuffer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
