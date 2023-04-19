@@ -34,6 +34,6 @@ Transform.h <br>
 SamplerState.h <br>
 Viewport.h <br>
 
-#Implementacion del modelo y UI
+# Implementacion del modelo y UI
 
 Dentro de este parcial se incorporo un modelo con la libreria objLoader, la cual es una pistola. De igual forma se le añade una interfaz de usuario para que se pueda editar mas facil
