@@ -7,7 +7,7 @@ void IndexBuffer::init(Device device, LoadData loadData){
     WARNING("ERROR: IndexBuffer::init : [CREATION OF RESORCE : FALSE] [CHECK FOR Device device]");
     exit(1);
   }
-  else if(loadData.index.size()) {
+  else if(loadData.index.size() == 0) {
     WARNING("ERROR: IndexBuffer::init : [CREATION OF RESORCE : FALSE] [CHECK FOR LoadData loadData.index.size()]");
     exit(1);
   }
@@ -21,12 +21,13 @@ void IndexBuffer::init(Device device, LoadData loadData){
   memset(&indexBufferDesc, 0, sizeof(indexBufferDesc));
   indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
   indexBufferDesc.ByteWidth = sizeof(unsigned int) * loadData.numIndex;
-  indexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+  indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
   indexBufferDesc.CPUAccessFlags = 0;
 
   D3D11_SUBRESOURCE_DATA InitData;
-
   InitData.pSysMem = loadData.index.data();
+
+  hr = device.CreateBuffer(&indexBufferDesc, &InitData, &m_indexBuffer);
 
   if (FAILED(hr)) {
     WARNING("ERROR: IndexBuffer::init : [CREATION OF RESORCE : FALSE] [CHECK FOR CreateBuffer]");

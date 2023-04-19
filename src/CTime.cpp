@@ -3,7 +3,9 @@
 
 
 CTime::CTime(){
-	
+	m_currentTime;
+	m_lastTime;
+	m_timerFrecuency;
 }
 
 CTime::~CTime(){

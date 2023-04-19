@@ -1,5 +1,6 @@
 #include "Viewport.h"
 #include "Window.h"
+#include "DeviceContext.h"
 
 //refers to the part of the document you are viewing, which is currently visible in your window
 void
@@ -30,7 +31,8 @@ Viewport::update() {
 }
 
 void
-Viewport::render() {
+Viewport::render(DeviceContext& deviceContext) {
+  deviceContext.RSSetViewports(1, &m_viewport);
 }
 
 void

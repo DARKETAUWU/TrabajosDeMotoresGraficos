@@ -5,6 +5,10 @@
 //The Texture library is called, which has several libraries that will be used throughout the project.
 #include "Texture.h"
 
+#include "DeviceContext.h"
+
+#include "DepthStencilView.h"
+
 //A render-target-view interface identifies the render-target subresources that 
 	//can be accessed during rendering.
 	//Create the Render Target View, it needs a device & backBuffer
@@ -34,7 +38,11 @@ RenderTargetView::update(){
 
 
 void 
-RenderTargetView::render(){
+RenderTargetView::render(DeviceContext& deviceContext, DepthStencilView& depthStencilView){
+	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+	deviceContext.ClearRenderTargetView(m_renderTargetView, ClearColor);
+
+	deviceContext.OMSetRenderTargets(1, &m_renderTargetView, depthStencilView.m_pDepthStencilView);
 }
 
 void 

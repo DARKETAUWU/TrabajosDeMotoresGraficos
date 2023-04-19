@@ -3,6 +3,8 @@
 //The Device library is called, which has several libraries that will be used throughout the project.
 #include "Device.h"
 
+#include "DeviceContext.h"
+
 
 
 void
@@ -103,5 +105,6 @@ Texture::init(	Device device,
 void Texture::update(){
 }
 
-void Texture::render(){
+void Texture::render(DeviceContext& deviceContext){
+	deviceContext.PSSetShaderResources(0, 1, &m_textureFromImg);
 }

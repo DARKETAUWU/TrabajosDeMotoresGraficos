@@ -21,20 +21,15 @@
 #include "ShaderProgram.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
-#include "ModelLoaderh.h"
+#include "ModelLoader.h"
+#include "UserInteface.h"
+#include "ConstantBuffer.h"
+
 
 // Global Variables
-
 D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
-D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
-IDXGISwapChain*                     g_pSwapChain = nullptr;
-ID3D11RenderTargetView*             g_pRenderTargetView = nullptr;
-ID3D11PixelShader*                  g_pPixelShader = nullptr;
-ID3D11VertexShader*                 g_pVertexShader = nullptr;
-ID3D11Buffer*                       g_pIndexBuffer = nullptr;
 ID3D11Buffer*                       g_Camera = nullptr;
-ID3D11Buffer*                       g_pCBChangesEveryFrame = nullptr;
-ID3D11SamplerState*                 g_pSamplerLinear = nullptr;
+
 
 XMMATRIX                            g_World;
 XMMATRIX                            g_View;
@@ -66,12 +61,12 @@ ShaderProgram                       g_shaderProgram;
 VertexBuffer                        g_VertexBuffer;
 IndexBuffer                         g_IndexBuffer;
 ModelLoader                         g_ModelLoader;
-
+UserInterface                       UI;
+ConstantBuffer                      g_ConstantBuffer;
 
 HRESULT 
 InitWindow( HINSTANCE hInstance, 
             int nCmdShow ); 
-
 HRESULT 
 InitDevice(); 
 LRESULT 
@@ -93,17 +88,19 @@ WINAPI wWinMain( HINSTANCE hInstance,
 
    
 
-    if (FAILED(g_window.init(hInstance, nCmdShow, WndProc)))
+    if (FAILED(g_window.init(hInstance, nCmdShow, WndProc, "Ocupo mimir")))
         return 0;
 
 
     if( FAILED( InitDevice() ) ){
-        //CleanupDevice();
         destroy();
         return 0;
     }
 
+
     g_time.init();
+
+    g_transform.init();
 
     // Main message loop
     MSG msg = {0};
@@ -116,7 +113,6 @@ WINAPI wWinMain( HINSTANCE hInstance,
            g_time.update();
            update();
            Render();
-            
         }
     }
 
@@ -129,15 +125,18 @@ WINAPI wWinMain( HINSTANCE hInstance,
 
 HRESULT 
 InitDevice(){
+
     HRESULT hr = S_OK;
 
+    
     g_swapChain.init(g_device, g_deviceContext, g_backBuffer, g_window);
  
     g_renderTargetView.init(g_device, g_backBuffer, DXGI_FORMAT_R8G8B8A8_UNORM);
 
     g_backBuffer.destroy();
-    if (FAILED(hr))
-        return hr;
+    if (FAILED(hr)) {
+      return hr;
+    }
 
     // Create depth stencil texture
     g_depthStencil.init( g_device,
@@ -154,46 +153,9 @@ InitDevice(){
     // Setup the viewport
     g_viewport.init(g_window);
 
-   /* g_shader.init(g_device, "TURORIAL07.Fx", Layout);*/
 
-    // Compile the vertex shader
-    ID3DBlob* pVSBlob = nullptr;
-    /*hr = CompileShaderFromFile( "Tutorial07.fx", "VS", "vs_4_0", &pVSBlob );
-    if( FAILED( hr ) ){
-        MessageBox( nullptr,
-                    "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK );
-        return hr;
-    }*/
-
-   /* hr = g_device.CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr,  &g_shaderProgram.CreateVertexShader(g_device));
-    if (FAILED(hr)){
-        pVSBlob->Release(); 
-        return hr;
-    }*/
-
-    // Define the input layout
-    D3D11_INPUT_ELEMENT_DESC layout[] = { { 
-            "POSITION",                   //Semantic Name  -> Identificador para la estructura en el shader
-            0,                              //Semantic Index -> En caso de tener mas de un Semantic Name igual
-            DXGI_FORMAT_R32G32B32_FLOAT,    //Format         -> Clasificador para el tipo de datos
-            0,                              //Input Slot     -> Revisa si existe mas de un vertex buffer (Esto es importante a considerar cuadno existan mas modelos)
-            D3D11_APPEND_ALIGNED_ELEMENT,   //AlignedByOffset  -> Administra el espacio en memoria y su ajuste idoneo
-            D3D11_INPUT_PER_VERTEX_DATA,    //InputSlotClassAt -> Se configura que tipo de dato se está asignando
-            0                               //InstanceDataRate -> Actualización de datos
-        },{ 
-            "TEXCOORD", 
-             0, 
-             DXGI_FORMAT_R32G32_FLOAT, 
-             0,
-             D3D11_APPEND_ALIGNED_ELEMENT, 
-             D3D11_INPUT_PER_VERTEX_DATA, 
-             0 
-},
-    };
-    unsigned int numElements = ARRAYSIZE(layout);
-
+    
     std::vector <D3D11_INPUT_ELEMENT_DESC> Layout;
-
     D3D11_INPUT_ELEMENT_DESC position;
     position.SemanticName = "POSITION";
     position.SemanticIndex = 0;
@@ -214,154 +176,34 @@ InitDevice(){
     texcoord.InstanceDataStepRate = 0;
     Layout.push_back(texcoord);
 
-    g_shaderProgram.init(g_device, "Tutorial07.fx", Layout);
-
-    // Create the input layout
-    //g_InputLayout.init(g_device, Layout, pVSBlob);
+    g_shaderProgram.init(g_device, "Tutorial07.Fx", Layout);
 
     LD = g_ModelLoader.load("Pistol.obj");
-   
-    /*pVSBlob->Release();
-    if( FAILED( hr ) )
-        return hr;*/
+    
 
-   
 
-    // Compile the pixel shader
-    //ID3DBlob* pPSBlob = nullptr;
-    //hr = CompileShaderFromFile( "Tutorial07.fx", "PS", "ps_4_0", &pPSBlob );
-    //if( FAILED( hr ) ){
-    //    MessageBox( nullptr,
-    //                "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK );
-    //    return hr;
-    //}
-
-    //// Create the pixel shader
-    //hr = g_device.CreatePixelShader( pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), nullptr, &g_pPixelShader );
-    //pPSBlob->Release();
-    //if( FAILED( hr ) )
-    //    return hr;
-
-    // Create vertex buffer
-    SimpleVertex vertices[] ={
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
-
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
-
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
-
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
-
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
-
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
-    };
-
-    //D3D11_BUFFER_DESC bd;
-    //memset( &bd, 0, sizeof(bd) );
-    //bd.Usage = D3D11_USAGE_DEFAULT;
-    //bd.ByteWidth = sizeof( SimpleVertex ) * 24;
-    //bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    //bd.CPUAccessFlags = 0;
-    //D3D11_SUBRESOURCE_DATA InitData;
-    //memset( &InitData, 0, sizeof(InitData) );
-    //InitData.pSysMem = vertices;
-    //hr = g_device.CreateBuffer( &bd, 
-    //                            &InitData, 
-    //                            &g_VertexBuffer );
-    //if( FAILED( hr ) )
-    //    return hr;
-
-    // Set vertex buffer
-    /*UINT stride = sizeof( SimpleVertex );
-    UINT offset = 0;
-    g_deviceContext.IASetVertexBuffers( 0, 
-                                        1, 
-                                        &g_VertexBuffer,
-                                        &stride, 
-                                        &offset );*/
     g_VertexBuffer.init(g_device, LD);
-    D3D11_SUBRESOURCE_DATA InitData;
 
-    D3D11_BUFFER_DESC ib;
-    memset( &ib, 0, sizeof(ib) );
-    ib.Usage = D3D11_USAGE_DEFAULT;
-    ib.ByteWidth = sizeof( SimpleVertex ) * 24;
-    ib.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    ib.CPUAccessFlags = 0;
-    memset( &InitData, 0, sizeof(InitData) );
-    InitData.pSysMem = vertices;
-    hr = g_device.CreateBuffer( &ib, &InitData, &g_pIndexBuffer);
-    if( FAILED( hr ) )
-        return hr;
+    g_IndexBuffer.init(g_device, LD);
 
-    WORD indices[] =
-    {
-        3,1,0,
-        2,1,3,
+    //D3D11_SUBRESOURCE_DATA InitData;
 
-        6,4,5,
-        7,4,6,
-
-        11,9,8,
-        10,9,11,
-
-        14,12,13,
-        15,12,14,
-
-        19,17,16,
-        18,17,19,
-
-        22,20,21,
-        23,20,22
-    };
 
     //create the constas buffers
     D3D11_BUFFER_DESC CanBufferDesc;
+    memset(&CanBufferDesc, 0, sizeof(CanBufferDesc));
     CanBufferDesc.Usage = D3D11_USAGE_DEFAULT;
     CanBufferDesc.ByteWidth = sizeof(Camera);
-    CanBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    CanBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     CanBufferDesc.CPUAccessFlags = 0;
-    hr = g_device.CreateBuffer( &CanBufferDesc, &InitData,  &g_Camera);
+    hr = g_device.CreateBuffer( &CanBufferDesc, nullptr,  &g_Camera);
     if( FAILED( hr ) )
         return hr;
 
     
-    D3D11_BUFFER_DESC ModelBufferDesc;
-    ModelBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    ModelBufferDesc.ByteWidth = sizeof(CBChangesEveryFrame);
-    ModelBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    ModelBufferDesc.CPUAccessFlags = 0;
-    hr = g_device.CreateBuffer(&ModelBufferDesc, &InitData, &g_pCBChangesEveryFrame);
-    if (FAILED(hr))
-      return hr;
+    g_ConstantBuffer.init(g_device, sizeof(CBChangesEveryFrame));
 
-    // Set index buffer
-    g_deviceContext.IASetIndexBuffer(   g_pIndexBuffer, 
-                                        DXGI_FORMAT_R16_UINT, 
-                                        0 );
-
-    // Set primitive topology
-    g_deviceContext.IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-
+  
 
     // Load the Texture
     g_ModelTexture.init(g_device, "seafloor.dds");
@@ -384,7 +226,8 @@ InitDevice(){
     cam.mView = XMMatrixTranspose(g_View);
     cam.mProjection = XMMatrixTranspose(g_Projection);
  
-    g_transform.init();
+    UI.init(g_window.m_hWnd,  g_device.m_device, g_deviceContext.m_deviceContext);
+    //g_transform.init();
     
     return S_OK;
 }
@@ -393,16 +236,28 @@ InitDevice(){
 void 
 update(){
 
-    if (g_driverType == D3D_DRIVER_TYPE_REFERENCE){
-        g_time.m_deltatime += (float)XM_PI * 0.0125f;
-    }
-    else{
-        static unsigned int dwTimeStart = 0;
-        unsigned int dwTimeCur = GetTickCount();
-        if (dwTimeStart == 0)
-            dwTimeStart = dwTimeCur;
-        g_time.m_deltatime = (dwTimeCur - dwTimeStart) / 1000.0f;
-    }
+    UI.update();
+    
+    bool show_demo_window = true;
+    ImGui::ShowDemoWindow(&show_demo_window);
+
+    ImGui::Begin("TRANSFORM");
+    ImGui::Text("POSITION");
+    ImGui::SliderFloat("Position X", &g_transform.Posicion3D.x, -4.0f, 1.0f);
+    ImGui::SliderFloat("Position Y", &g_transform.Posicion3D.y, -2.0f, 2.0f);
+    ImGui::SliderFloat("Position Z", &g_transform.Posicion3D.z, -2.0f, 2.0f);
+
+    ImGui::Text("ROTATION");
+    ImGui::SliderFloat("Rotation X", &g_transform.Posicion3D.x, -6.0f, 6.0f);
+    ImGui::SliderFloat("Rotation Y", &g_transform.Posicion3D.y, -6.0f, 6.0f);
+    //ImGui::SliderFloat("Position Y", &g_transform.m_v3Position.y, -2.0f, 2.0f);
+    //ImGui::SliderFloat("Position Z", &g_transform.m_v3Position.z, -2.0f, 2.0f);
+    ImGui::End();
+
+    UI.vec3Control("Position", &g_transform.Posicion3D.x);
+    UI.vec3Control("Rotation", &g_transform.Posicion3D.x);
+    UI.vec3Control("Escale", &g_transform.m_v3Scale.x, 0.5f);
+
     g_transform.m_ScaleNum += 0.0002f;
     
 
@@ -413,11 +268,12 @@ update(){
     cb.mWorld = XMMatrixTranspose(g_World);
     cb.vMeshColor = g_vMeshColor;
 
+    g_ConstantBuffer.update(g_deviceContext, 0, nullptr, &cb, 0, 0);
     //UpdateCamera Buffers
     g_deviceContext.UpdateSubresource(g_Camera, 0, nullptr, &cam, 0, 0);
 
     //Update Mesh Buffers
-    g_deviceContext.UpdateSubresource(g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0);
+   // g_deviceContext.UpdateSubresource(g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0);
 
 }
 
@@ -427,17 +283,24 @@ destroy(){
     g_samplerState.destroy();
     g_ModelTexture.destroy();
     if (g_Camera) g_Camera->Release();
-    if (g_pCBChangesEveryFrame) g_pCBChangesEveryFrame->Release();
+    //if (g_pCBChangesEveryFrame) g_pCBChangesEveryFrame->Release();
     g_VertexBuffer.destroy();
     //if (g_VertexBuffer) g_VertexBuffer->Release();
-    if (g_pIndexBuffer) g_pIndexBuffer->Release();
+    //if (g_pIndexBuffer) g_pIndexBuffer->Release();
+    g_IndexBuffer.destroy();
     g_shaderProgram.destroy();
     g_depthStencil.destroy();
     g_depthStencilView.destroy();
     g_renderTargetView.destroy();
     g_swapChain.destroy();
+    UI.render();
     g_device.destroy();;
+   
+    
 }
+
+extern IMGUI_IMPL_API LRESULT
+ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT 
 CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -532,58 +395,24 @@ CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void 
 Render()
 {
-
-
-  float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
-
-  //Clears the depth-stencil resource.
-  g_deviceContext.ClearDepthStencilView(g_depthStencilView.m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-  //Set all the elements in a render target to one value.
-  g_deviceContext.ClearRenderTargetView(g_renderTargetView.m_renderTargetView, ClearColor);
-
-   
-    
-    
-    //Bind one or more render targets atomically and the depth-stencil buffer to the output-merger stage.
-    g_deviceContext.OMSetRenderTargets(1, &g_renderTargetView.m_renderTargetView, g_depthStencilView.m_pDepthStencilView);
-    //Bind an array of viewports to the rasterizer stage of the pipeline.
-    g_deviceContext.RSSetViewports(1, &g_viewport.m_viewport);
-    // Set the input layout
-    //g_deviceContext.IASetInputLayout(g_InputLayout.m_inputlayout);
-    //
-   
-    ////Set a vertex shader to the device.
-    //g_deviceContext.VSSetShader(g_pVertexShader, nullptr, 0);
-    ////Sets a pixel shader to the device.
-    //g_deviceContext.PSSetShader(g_pPixelShader, nullptr, 0);
-
-    g_shaderProgram.render(g_deviceContext);
-
-    g_deviceContext.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    //Sets the constant buffers used by the vertex shader pipeline stage.
-    g_deviceContext.VSSetConstantBuffers(0, 1, &g_Camera);
-
-    g_VertexBuffer.render(g_deviceContext, 0);
-
-    //set index buffer
-    g_IndexBuffer.render(g_deviceContext, DXGI_FORMAT_R32_UINT);
-
-    //Sets the constant buffers used by the vertex shader pipeline stage.
-    g_deviceContext.VSSetConstantBuffers(1, 1, &g_pCBChangesEveryFrame);
+ 
+  g_depthStencilView.render(g_deviceContext);
+  g_renderTargetView.render(g_deviceContext, g_depthStencilView);
+  g_viewport.render(g_deviceContext);
+  g_shaderProgram.render(g_deviceContext);
+  g_deviceContext.VSSetConstantBuffers(0, 1, &g_Camera);
+  g_samplerState.render(g_deviceContext);
+  g_VertexBuffer.render(g_deviceContext, 0);
+  g_IndexBuffer.render(g_deviceContext, DXGI_FORMAT_R32_UINT);
+  g_ConstantBuffer.VSSetConstantBuffer(g_deviceContext, 1, 1);
+  g_ConstantBuffer.PSSetConstantBuffers(g_deviceContext, 1, 1);
+  g_deviceContext.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+  g_ModelTexture.render(g_deviceContext);
+  g_deviceContext.DrawIndexed(LD.index.size(), 0, 0);
+  UI.render();
+  g_swapChain.present();
 
     
-    //Sets the constant buffers used by the pixel shader pipeline stage.
-    g_deviceContext.PSSetConstantBuffers(1, 1, &g_pCBChangesEveryFrame);
-    //Bind an array of shader resources to the pixel shader stage.
-    g_deviceContext.PSSetShaderResources(0, 1, &g_ModelTexture.m_textureFromImg);
-    //Set an array of sampler states to the pixel shader pipeline stage.
-    g_deviceContext.PSSetSamplers(0, 1, &g_samplerState.m_sampler);
-    //Draw indexed, non-instanced primitives.
-    g_deviceContext.DrawIndexed(36, 0, 0);
-    // Present our back buffer to our front buffer
-    g_swapChain.present();
 }
 
 

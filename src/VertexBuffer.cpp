@@ -2,21 +2,23 @@
 #include "Device.h"
 #include "DeviceContext.h"
 
+
 void 
 VertexBuffer::init(Device device, LoadData loadData) {
 
   if (device.m_device == nullptr) {
-    WARNING("ERROR: DepthStencilView::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR Device device] \n");
+    WARNING("ERROR: VertexBuffer::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR Device device] \n");
     exit(1);
   }
   else if (loadData.vertex.size() == 0) {
-    WARNING("ERROR: DepthStencilView::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR int numVertex] \n");
+    WARNING("ERROR: VertexBuffer::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR Load loadData.numVertex] \n");
     exit(1);
   }
   else if (loadData.numVertex == 0) {
-    WARNING("ERROR: DepthStencilView::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR int numVertex] \n");
+    WARNING("ERROR: VertexBuffer::init : [CREATION OF RESOURCE : FALSE] [CHECK FOR Load loadData.numVertex] \n");
     exit(1);
   }
+  
 
 
   HRESULT hr = S_OK;
@@ -50,5 +52,5 @@ VertexBuffer::render(DeviceContext& deviceContex, unsigned int StartSlot){
 
 void 
 VertexBuffer::destroy(){
-
+  SAFE_RELEASE(m_VertexBuffer);
 }

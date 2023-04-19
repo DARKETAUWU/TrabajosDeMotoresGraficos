@@ -28,6 +28,7 @@ void ShaderProgram::update()
 }
 
 void ShaderProgram::render(DeviceContext& deviceContext){
+  deviceContext.IASetInputLayout(m_inputLayout.m_inputlayout);
   deviceContext.VSSetShader(m_VertexShader, nullptr, 0);
   deviceContext.PSSetShader(m_PixelShader, nullptr, 0);
 }

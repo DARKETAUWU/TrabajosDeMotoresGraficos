@@ -25,7 +25,7 @@ CBChangesEveryFrame{
 
 //we put a vector structure to help us move the cube,
 //we initialize everything to 0 so that there is no error
-struct Vector3F{
+struct Vector3{
     float x = 0.0f;
     float y = 0.0f;
     float z = 0.0f;

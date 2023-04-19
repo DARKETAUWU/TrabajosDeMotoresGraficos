@@ -3,6 +3,8 @@
 //The Device library is called
 #include "Device.h"
 
+#include "DeviceContext.h"
+
 //Create a depth stencil view to access the resource data.
 void
 DepthStencilView::init(Device device,
@@ -36,7 +38,8 @@ DepthStencilView::update() {
 }
 
 void
-DepthStencilView::render() {
+DepthStencilView::render(DeviceContext deviceContext) {
+	deviceContext.ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 //This function releases the pointer ppT and sets it equal to NULL.

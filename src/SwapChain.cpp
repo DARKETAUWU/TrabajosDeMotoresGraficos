@@ -6,7 +6,10 @@
 
 //This topic show how to create a swap chain that encapsulates two or more buffers that are used for rendering and display.
 void
-SwapChain::init(Device& device, DeviceContext& deviceContext, Texture& backBuffer, Window window) {
+SwapChain::init(Device& device, 
+	              DeviceContext& deviceContext,
+	              Texture& backBuffer, 
+								Window window) {
 	
 	//If the window is empty, the following warning will be displayed
 	if (window.m_hWnd == nullptr) {

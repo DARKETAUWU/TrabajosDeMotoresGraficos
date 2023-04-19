@@ -19,13 +19,17 @@ public:
 	render();
 	void 
 	destroy();
-	//The deltatime variable is declared with which we will be calling it to occupy the time
-	float m_deltatime;
+
 private:
-	
+
+	//The deltatime variable is declared with which we will be calling it to occupy the time
 	LARGE_INTEGER m_currentTime;
 	LARGE_INTEGER m_lastTime;
 	LARGE_INTEGER m_timerFrecuency;
+	
+public:
+	float m_deltatime;
+	
 	
 };
 

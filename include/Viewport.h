@@ -2,9 +2,14 @@
 //The Prerequisites library is called, which has several libraries that will be used throughout the project.
 #include "Prerequisites.h"
 
+
+
 //The Window class is called to use its variables
 class
 	Window;
+
+class
+	DeviceContext;
 
 //Create the camera's point of view class
 class
@@ -21,7 +26,7 @@ public:
   update();
 
 	void
-	render();
+	render(DeviceContext& deviceContext);
 
 	void
 	destroy();

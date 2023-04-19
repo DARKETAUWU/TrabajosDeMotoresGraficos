@@ -8,7 +8,7 @@ Window{
 		~Window();
 
 		HRESULT
-		init(HINSTANCE hInstance, int nCndShow, WNDPROC wndproc);
+		init(HINSTANCE hInstance, int nCndShow, WNDPROC wndproc, LPCSTR windowName);
 
 		void 
 		update();

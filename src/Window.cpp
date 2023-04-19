@@ -11,7 +11,10 @@ Window::~Window() {
 
 //Initializes a thread to use Windows Runtime APIs.
 HRESULT
-Window::init(HINSTANCE hInstance, int nCmdShow, WNDPROC wndproc){
+Window::init(HINSTANCE hInstance, int nCmdShow, WNDPROC wndproc, LPCSTR windowName){
+
+     m_windowName = windowName;
+     n_hInst = hInstance;
 
     //Contains window class information. It is used with the RegisterClassEx and GetClassInfoEx  functions
     WNDCLASSEX wcex; 
@@ -33,9 +36,17 @@ Window::init(HINSTANCE hInstance, int nCmdShow, WNDPROC wndproc){
     // Create window
     RECT rc = { 0, 0, 640, 480 };
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-    m_hWnd = CreateWindow("TutorialWindowClass", "Direct3D 11 Tutorial 7", WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance,
-        nullptr);
+    m_hWnd = CreateWindow("TutorialWindowClass", 
+                           m_windowName,
+                           WS_OVERLAPPEDWINDOW,
+                           CW_USEDEFAULT, 
+                           CW_USEDEFAULT, 
+                           rc.right - rc.left, 
+                           rc.bottom - rc.top, 
+                           nullptr, 
+                           nullptr, 
+                           hInstance,
+                           nullptr);
     if (!m_hWnd)
         return E_FAIL;
 

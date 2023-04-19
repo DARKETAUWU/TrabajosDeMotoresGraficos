@@ -8,6 +8,10 @@ class
 class 
 	Texture;
 
+class DeviceContext;
+
+class DepthStencilView;
+
 class 
 RenderTargetView {
 public: 
@@ -18,13 +22,16 @@ public:
 	//can be accessed during rendering.
 	//Create the Render Target View, it needs a device & backBuffer
 	void
-	init(Device device, Texture backBuffer, DXGI_FORMAT Format);
+	init(Device device, 
+		   Texture backBuffer, 
+		   DXGI_FORMAT Format);
 	
 	void 
 	update();
 	
 	void 
-	render();
+	render(DeviceContext& deviceContext, 
+		     DepthStencilView& depthStencilView);
 	
 	void 
 	destroy();
