@@ -29,9 +29,6 @@
 // Global Variables
 D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
 ID3D11Buffer*                       g_Camera = nullptr;
-ID3D11Texture2D* imguiTexture;
-ID3D11RenderTargetView* imguiRTV;
-ID3D11ShaderResourceView* imguiSRV = nullptr;
 
 
 XMMATRIX                            g_World;
@@ -191,28 +188,7 @@ InitDevice(){
 
     
 
-    D3D11_TEXTURE2D_DESC textureDesc;
-    ZeroMemory(&textureDesc, sizeof(textureDesc));
-    textureDesc.Width = g_window.m_width;
-    textureDesc.Height = g_window.m_height;
-    textureDesc.MipLevels = 1;
-    textureDesc.ArraySize = 1;
-    textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    textureDesc.SampleDesc.Count = 1;
-    textureDesc.Usage = D3D11_USAGE_DEFAULT;
-    textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-    g_device.m_device->CreateTexture2D(&textureDesc, NULL, &imguiTexture);
-
-    // Crear una vista de render target para la textura de IMGUI
-    g_device.m_device->CreateRenderTargetView(imguiTexture, NULL, &imguiRTV);
-
-    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-    ZeroMemory(&srvDesc, sizeof(srvDesc));
-    srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    srvDesc.Texture2D.MipLevels = 1;
-    srvDesc.Texture2D.MostDetailedMip = 0;
-    g_device.m_device->CreateShaderResourceView(imguiTexture, &srvDesc, &imguiSRV);
+   
 
     //create the constas buffers
     D3D11_BUFFER_DESC CanBufferDesc;
@@ -260,31 +236,37 @@ InitDevice(){
 void 
 update() {
 
-
+  //We call the update class of the ui
   UI.update();
-
+  //We send him to show us the window
   bool show_demo_window = true;
-  //creamos una variable para el tamaño del voton
+  //We create a variable for the size of the button
   ImVec2 button_size;
-  //calcula el tamaño de la pantaña para poder crear el botton
+  //calculate the size of the screen to be able to create the botton
   ImVec2 width = ImGui::GetWindowSize();
-
+  //We create a variable for the size of the text
   ImVec2 tex_size;
-
+  //We create a variable to which we will assign the value where the center will be positioned
   float center_position_for_button;
+  //We create a variable to which we will assign the value where the center will be positioned
   float center_position_for_text;
 
-  //ImGui::ShowDemoWindow(&show_demo_window);
-
-  //ImGui::StyleColorsDark();
-
+  
+    //A screen is initialized which will contain the buttons to modify the transform
     ImGui::Begin("TRANSFORM");
+    //New Line
     ImGui::NewLine();
+    //We initialize the variable of the size
     tex_size = ImVec2{ 150 , 0 };
+    //To get the center of the text we need the result of the subtraction of the size of the screen minus the size of the text divided by two
     center_position_for_text = (width.x - tex_size.x) / 2;
+    //We give the cursor the result of the previous operation
     ImGui::SetCursorPosX(center_position_for_text);
+    //We generate the text with her center
     ImGui::Text("POSITION", tex_size);
+    // New line
     ImGui::NewLine();
+
     ImGui::SliderFloat("Position X", &g_transform.Posicion3D.x, -4.0f, 1.0f);
     ImGui::SliderFloat("Position Y", &g_transform.Posicion3D.y, -2.0f, 2.0f);
     ImGui::SliderFloat("Position Z", &g_transform.Posicion3D.z, -2.0f, 2.0f);
@@ -326,6 +308,7 @@ update() {
     center_position_for_text = (width.x - tex_size.x) / 1;
     ImGui::SetCursorPosX(center_position_for_text);
     ImGui::NewLine();
+    
     static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
     ImGui::Text("CUSTOM COLOR", tex_size);
     ImGui::NewLine();
@@ -334,7 +317,7 @@ update() {
     g_vMeshColor = color;
     ImGui::NewLine();
     ImGui::Text("CLEAR COLOR");
-
+    
     ImGui::End();
 
     ImGui::Begin("INFO");
@@ -345,13 +328,8 @@ update() {
 
     ImGui::End();
 
-    /*bool Stage = true;
-    ImGui::Begin("Renderer", &Stage, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
-    ImTextureID texId = (ImTextureID)Re  ;
-    ImGui::Image(texId, ImVec2(g_window.m_width / 2, g_window.m_height / 2));
-    ImGui::End();*/
-   
-
+    
+  
     g_transform.m_ScaleNum += 0.0002f;
     
 
@@ -491,7 +469,7 @@ CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void 
 Render()
 {
-  g_deviceContext.m_deviceContext->OMSetRenderTargets(1, &imguiRTV, NULL);
+ 
   g_depthStencilView.render(g_deviceContext);
   g_renderTargetView.render(g_deviceContext, g_depthStencilView);
   g_viewport.render(g_deviceContext);
@@ -503,14 +481,8 @@ Render()
   g_ConstantBuffer.VSSetConstantBuffer(g_deviceContext, 1, 1);
   g_ConstantBuffer.PSSetConstantBuffers(g_deviceContext, 1, 1);
   g_deviceContext.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-  ID3D11ShaderResourceView* srvs[] = { imguiSRV };
-  g_deviceContext.m_deviceContext->PSSetShaderResources(0, 1, srvs);
   g_ModelTexture.render(g_deviceContext);
   g_deviceContext.DrawIndexed(LD.index.size(), 0, 0);
-  // Copiar el back buffer a la textura IMGUI
-  g_swapChain.m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&g_backBuffer.m_texture);
-  g_deviceContext.m_deviceContext->CopyResource(imguiTexture, g_backBuffer.m_texture);
-  g_backBuffer.m_texture->Release();
   UI.render();
   g_swapChain.present();
 
