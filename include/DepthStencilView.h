@@ -25,7 +25,7 @@ public:
 	update();
 
 	void
-	render(DeviceContext deviceContex);
+	render(DeviceContext& deviceContex);
 
 	void
 	destroy();

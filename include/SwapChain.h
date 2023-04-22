@@ -46,6 +46,8 @@ public:
 	void
 	present();
 
+	//An IDXGISwapChain interface implements one or more surfaces for storing rendered data before presenting it to an output.
+	IDXGISwapChain* m_swapChain = nullptr;
 
 private:
 	//A NULL driver, which is a reference driver without render capability.
@@ -53,6 +55,6 @@ private:
 	//Describes the set of features targeted by a Direct3D device.
 	D3D_FEATURE_LEVEL m_featureLevel = D3D_FEATURE_LEVEL_11_0;
 	//An IDXGISwapChain interface implements one or more surfaces for storing rendered data before presenting it to an output.
-	IDXGISwapChain* m_swapChain = nullptr;
+	/*IDXGISwapChain* m_swapChain = nullptr;*/
 
 };

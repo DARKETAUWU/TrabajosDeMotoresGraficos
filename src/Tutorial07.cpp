@@ -29,6 +29,9 @@
 // Global Variables
 D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
 ID3D11Buffer*                       g_Camera = nullptr;
+ID3D11Texture2D* imguiTexture;
+ID3D11RenderTargetView* imguiRTV;
+ID3D11ShaderResourceView* imguiSRV = nullptr;
 
 
 XMMATRIX                            g_World;
@@ -186,8 +189,30 @@ InitDevice(){
 
     g_IndexBuffer.init(g_device, LD);
 
-    //D3D11_SUBRESOURCE_DATA InitData;
+    
 
+    D3D11_TEXTURE2D_DESC textureDesc;
+    ZeroMemory(&textureDesc, sizeof(textureDesc));
+    textureDesc.Width = g_window.m_width;
+    textureDesc.Height = g_window.m_height;
+    textureDesc.MipLevels = 1;
+    textureDesc.ArraySize = 1;
+    textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    textureDesc.SampleDesc.Count = 1;
+    textureDesc.Usage = D3D11_USAGE_DEFAULT;
+    textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+    g_device.m_device->CreateTexture2D(&textureDesc, NULL, &imguiTexture);
+
+    // Crear una vista de render target para la textura de IMGUI
+    g_device.m_device->CreateRenderTargetView(imguiTexture, NULL, &imguiRTV);
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    ZeroMemory(&srvDesc, sizeof(srvDesc));
+    srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Texture2D.MipLevels = 1;
+    srvDesc.Texture2D.MostDetailedMip = 0;
+    g_device.m_device->CreateShaderResourceView(imguiTexture, &srvDesc, &imguiSRV);
 
     //create the constas buffers
     D3D11_BUFFER_DESC CanBufferDesc;
@@ -206,7 +231,7 @@ InitDevice(){
   
 
     // Load the Texture
-    g_ModelTexture.init(g_device, "seafloor.dds");
+    g_ModelTexture.init(g_device, "GunAlbedo.dds");
 
     // Create the sample state
     g_samplerState.init(g_device);
@@ -232,31 +257,100 @@ InitDevice(){
     return S_OK;
 }
 
-
 void 
-update(){
+update() {
 
-    UI.update();
-    
-    bool show_demo_window = true;
-    ImGui::ShowDemoWindow(&show_demo_window);
+
+  UI.update();
+
+  bool show_demo_window = true;
+  //creamos una variable para el tamaño del voton
+  ImVec2 button_size;
+  //calcula el tamaño de la pantaña para poder crear el botton
+  ImVec2 width = ImGui::GetWindowSize();
+
+  ImVec2 tex_size;
+
+  float center_position_for_button;
+  float center_position_for_text;
+
+  //ImGui::ShowDemoWindow(&show_demo_window);
+
+  //ImGui::StyleColorsDark();
 
     ImGui::Begin("TRANSFORM");
-    ImGui::Text("POSITION");
+    ImGui::NewLine();
+    tex_size = ImVec2{ 150 , 0 };
+    center_position_for_text = (width.x - tex_size.x) / 2;
+    ImGui::SetCursorPosX(center_position_for_text);
+    ImGui::Text("POSITION", tex_size);
+    ImGui::NewLine();
     ImGui::SliderFloat("Position X", &g_transform.Posicion3D.x, -4.0f, 1.0f);
     ImGui::SliderFloat("Position Y", &g_transform.Posicion3D.y, -2.0f, 2.0f);
     ImGui::SliderFloat("Position Z", &g_transform.Posicion3D.z, -2.0f, 2.0f);
-
-    ImGui::Text("ROTATION");
-    ImGui::SliderFloat("Rotation X", &g_transform.Posicion3D.x, -6.0f, 6.0f);
-    ImGui::SliderFloat("Rotation Y", &g_transform.Posicion3D.y, -6.0f, 6.0f);
-    //ImGui::SliderFloat("Position Y", &g_transform.m_v3Position.y, -2.0f, 2.0f);
-    //ImGui::SliderFloat("Position Z", &g_transform.m_v3Position.z, -2.0f, 2.0f);
+    ImGui::NewLine();
+    //area del botton en el centro
+    button_size = ImVec2{ 150 , 0 };
+    center_position_for_button = (width.x - button_size.x) / 3;
+    ImGui::SetCursorPosX(center_position_for_button);
+    if (ImGui::Button("Reset", button_size)) {
+      g_transform.Posicion3D.z = 0;
+      g_transform.Posicion3D.y = 0;
+      g_transform.Posicion3D.x = 0;
+    }
     ImGui::End();
 
+    
+    ImGui::Begin("ROTATION");
+    ImGui::NewLine();
+    tex_size = ImVec2{ 150 , 0 };
+    center_position_for_text = (width.x - tex_size.x) / 2;
+    ImGui::SetCursorPosX(center_position_for_text);
+    ImGui::Text("ROTATION", center_position_for_text);
+    ImGui::NewLine();
+    ImGui::SliderFloat("Rotation X", &g_transform.Posicion3D.x, -6.0f, 6.0f);
+    ImGui::SliderFloat("Rotation Y", &g_transform.Posicion3D.y, -6.0f, 6.0f);
+    ImGui::NewLine();
+    button_size = ImVec2{ 150 , 0 };
+    center_position_for_button = (width.x - button_size.x) / 3;
+    ImGui::SetCursorPosX(center_position_for_button);
+    if (ImGui::Button("Reset", button_size)) {
+      g_transform.Posicion3D.z = 0;
+      g_transform.Posicion3D.y = 0;
+      g_transform.Posicion3D.x = 0;
+    }
+    ImGui::End();
+
+    ImGui::Begin("COLOR");
+    tex_size = ImVec2{ 150 , 0 };
+    center_position_for_text = (width.x - tex_size.x) / 1;
+    ImGui::SetCursorPosX(center_position_for_text);
+    ImGui::NewLine();
+    static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
+    ImGui::Text("CUSTOM COLOR", tex_size);
+    ImGui::NewLine();
+    // color picker
+    ImGui::ColorEdit3("color", color);
+    g_vMeshColor = color;
+    ImGui::NewLine();
+    ImGui::Text("CLEAR COLOR");
+
+    ImGui::End();
+
+    ImGui::Begin("INFO");
+    ImGui::NewLine();
     UI.vec3Control("Position", &g_transform.Posicion3D.x);
+    ImGui::NewLine();
     UI.vec3Control("Rotation", &g_transform.Posicion3D.x);
-    UI.vec3Control("Escale", &g_transform.m_v3Scale.x, 0.5f);
+
+    ImGui::End();
+
+    /*bool Stage = true;
+    ImGui::Begin("Renderer", &Stage, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    ImTextureID texId = (ImTextureID)Re  ;
+    ImGui::Image(texId, ImVec2(g_window.m_width / 2, g_window.m_height / 2));
+    ImGui::End();*/
+   
 
     g_transform.m_ScaleNum += 0.0002f;
     
@@ -268,12 +362,13 @@ update(){
     cb.mWorld = XMMatrixTranspose(g_World);
     cb.vMeshColor = g_vMeshColor;
 
+    
     g_ConstantBuffer.update(g_deviceContext, 0, nullptr, &cb, 0, 0);
     //UpdateCamera Buffers
+    
     g_deviceContext.UpdateSubresource(g_Camera, 0, nullptr, &cam, 0, 0);
-
-    //Update Mesh Buffers
-   // g_deviceContext.UpdateSubresource(g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0);
+    
+    
 
 }
 
@@ -305,6 +400,7 @@ ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 LRESULT 
 CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+  ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam);
     PAINTSTRUCT ps;
     HDC hdc;
 
@@ -395,7 +491,7 @@ CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void 
 Render()
 {
- 
+  g_deviceContext.m_deviceContext->OMSetRenderTargets(1, &imguiRTV, NULL);
   g_depthStencilView.render(g_deviceContext);
   g_renderTargetView.render(g_deviceContext, g_depthStencilView);
   g_viewport.render(g_deviceContext);
@@ -407,8 +503,14 @@ Render()
   g_ConstantBuffer.VSSetConstantBuffer(g_deviceContext, 1, 1);
   g_ConstantBuffer.PSSetConstantBuffers(g_deviceContext, 1, 1);
   g_deviceContext.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+  ID3D11ShaderResourceView* srvs[] = { imguiSRV };
+  g_deviceContext.m_deviceContext->PSSetShaderResources(0, 1, srvs);
   g_ModelTexture.render(g_deviceContext);
   g_deviceContext.DrawIndexed(LD.index.size(), 0, 0);
+  // Copiar el back buffer a la textura IMGUI
+  g_swapChain.m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&g_backBuffer.m_texture);
+  g_deviceContext.m_deviceContext->CopyResource(imguiTexture, g_backBuffer.m_texture);
+  g_backBuffer.m_texture->Release();
   UI.render();
   g_swapChain.present();
 
