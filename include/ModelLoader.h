@@ -9,16 +9,16 @@ public:
 	~ModelLoader() {};
 
 	void
-		init();
+	init();
 	void
-		update();
+	update();
 	void
-		render();
+	render();
 	void 
-		destroy();
+	destroy();
 
 	LoadData
-		load(std::string ObjFileName);
+	load(std::string ObjFileName);
 private:
 
 };
