@@ -1,19 +1,23 @@
 #include "ModelLoader.h"
 #include "OBJLoader.h"
 
-void ModelLoader::init()
+void 
+ModelLoader::init()
 {
 }
 
-void ModelLoader::update()
+void 
+ModelLoader::update()
 {
 }
 
-void ModelLoader::render()
+void 
+ModelLoader::render()
 {
 }
 
-void ModelLoader::destroy()
+void 
+ModelLoader::destroy()
 {
 }
 
