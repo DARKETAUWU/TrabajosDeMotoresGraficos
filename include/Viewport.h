@@ -23,7 +23,7 @@ public:
 	init(Window window);
 
 	void
-  update();
+        update();
 
 	void
 	render(DeviceContext& deviceContext);
