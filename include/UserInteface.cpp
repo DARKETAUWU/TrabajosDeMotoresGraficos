@@ -32,14 +32,16 @@ UserInterface::init(void* window, ID3D11Device* device, ID3D11DeviceContext* dev
   ImGui_ImplDX11_Init(device, deviceContext);
 }
 
-void UserInterface::update()
+void 
+UserInterface::update()
 {
   ImGui_ImplDX11_NewFrame();
   ImGui_ImplWin32_NewFrame();
   ImGui::NewFrame();
 }
 
-void UserInterface::render()
+void 
+UserInterface::render()
 {
   ImGui::Render();
   ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -51,14 +53,19 @@ void UserInterface::render()
   }
 }
 
-void UserInterface::destroy()
+void 
+UserInterface::destroy()
 {
   ImGui_ImplDX11_Shutdown();
   ImGui_ImplWin32_Shutdown();
   ImGui::DestroyContext();
 }
 
-void UserInterface::vec3Control(std::string label, float* values, float resetValues, float columnWidth)
+void 
+UserInterface::vec3Control(std::string label, 
+                           float* values, 
+                           float resetValues, 
+                           float columnWidth)
 {
   ImGui::PushID(label.c_str());
   ImGui::Columns(2);

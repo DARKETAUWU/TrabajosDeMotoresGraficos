@@ -98,7 +98,7 @@ public:
         
 	//Set an array of sampler states to the pixel shader pipeline stage.
 	void 
-	PSSetSamplers(	unsigned int StartSlot, 
+	PSSetSamplers(unsigned int StartSlot, 
 			unsigned int NumSamplet, 
 			ID3D11SamplerState* const* ppSamplers);
 

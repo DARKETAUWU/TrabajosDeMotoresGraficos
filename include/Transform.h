@@ -28,6 +28,6 @@ public:
 	float m_RotateNum;
 	//A variable is created with which a speed on the cube will be used
 	float m_Speed;
-
-	Vector3	m_v3Scale;
+	//The vector class is called with which we can adjust the  where the cube will move
+	Vector3	Rotate;
 };

@@ -15,7 +15,8 @@ public:
   ~ConstantBuffer() {};
 
   void
-  init(Device device, unsigned int ByteWidth);
+  init(Device device, 
+       unsigned int ByteWidth);
 
   void
   update(DeviceContext& deviceContext, 
