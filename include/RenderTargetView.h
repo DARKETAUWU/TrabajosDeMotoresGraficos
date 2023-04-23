@@ -23,15 +23,15 @@ public:
 	//Create the Render Target View, it needs a device & backBuffer
 	void
 	init(Device device, 
-		   Texture backBuffer, 
-		   DXGI_FORMAT Format);
+	     Texture backBuffer, 
+	     DXGI_FORMAT Format);
 	
 	void 
 	update();
 	
 	void 
 	render(DeviceContext& deviceContext, 
-		     DepthStencilView& depthStencilView);
+	       DepthStencilView& depthStencilView);
 	
 	void 
 	destroy();
