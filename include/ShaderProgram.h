@@ -13,28 +13,34 @@ public:
   ~ShaderProgram() {};
 
   void 
-    init(Device device, std::string fileName, std::vector<D3D11_INPUT_ELEMENT_DESC> Layout);
+  init(Device device, 
+       std::string fileName, 
+       std::vector<D3D11_INPUT_ELEMENT_DESC> Layout);
 
   void 
-    update();
+  update();
 
   void 
-    render(DeviceContext& deviceContext);
+  render(DeviceContext& deviceContext);
 
   void 
     destroy();
 
   HRESULT
-    CompileShaderFromFile(char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
+  CompileShaderFromFile(char* szFileName, 
+                        LPCSTR szEntryPoint, 
+                        LPCSTR szShaderModel, 
+                        ID3DBlob** ppBlobOut);
 
   void
-    CreateVertexShader(Device device);
+  CreateVertexShader(Device device);
 
   void
-    CreateInputLayout(Device device, std::vector<D3D11_INPUT_ELEMENT_DESC> Layout);
+  CreateInputLayout(Device device, 
+                    std::vector<D3D11_INPUT_ELEMENT_DESC> Layout);
  
   void
-    CreatePixelShader(Device device);
+  CreatePixelShader(Device device);
 
 public:
   ID3D11VertexShader* m_VertexShader = nullptr;
