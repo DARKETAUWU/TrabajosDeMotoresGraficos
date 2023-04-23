@@ -26,9 +26,9 @@ public:
  
   void 
     vec3Control(std::string label, 
-                   float* values,
-                   float resetValues = 0.0f, 
-                   float columnWidth = 100.0f);
+                float* values,
+                float resetValues = 0.0f, 
+                float columnWidth = 100.0f);
 private:
 
 
