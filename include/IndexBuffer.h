@@ -14,7 +14,7 @@ public:
 
 	void 
 	init(Device device, 
-			 LoadData loadData);
+	     LoadData loadData);
 	void
 		update();
 	void
