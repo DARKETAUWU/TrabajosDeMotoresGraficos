@@ -16,11 +16,12 @@ public:
 	init(Device device, 
 	     LoadData loadData);
 	void
-		update();
+	update();
 	void
-		render(DeviceContext& deviceContex, unsigned int StartSlot);
+        render(DeviceContext& deviceContex, 
+	       unsigned int StartSlot);
 	void 
-		destroy();
+	destroy();
 private:
 	ID3D11Buffer* m_indexBuffer = nullptr;
 	unsigned int m_stride = sizeof(SimpleVertex);
