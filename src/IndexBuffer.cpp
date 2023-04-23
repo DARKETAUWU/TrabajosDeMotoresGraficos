@@ -2,7 +2,9 @@
 #include "Device.h"
 #include "DeviceContext.h"
 
-void IndexBuffer::init(Device device, LoadData loadData){
+void 
+IndexBuffer::init(Device device, 
+                  LoadData loadData){
   if (device.m_device == nullptr) {
     WARNING("ERROR: IndexBuffer::init : [CREATION OF RESORCE : FALSE] [CHECK FOR Device device]");
     exit(1);
@@ -36,16 +38,20 @@ void IndexBuffer::init(Device device, LoadData loadData){
 
 }
 
-void IndexBuffer::update()
+void 
+IndexBuffer::update()
 {
 }
 
-void IndexBuffer::render(DeviceContext& deviceContex, unsigned int StartSlot)
+void 
+IndexBuffer::render(DeviceContext& deviceContex, 
+                    unsigned int StartSlot)
 {
   deviceContex.IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 }
 
-void IndexBuffer::destroy()
+void 
+IndexBuffer::destroy()
 {
   SAFE_RELEASE(m_indexBuffer);
 }
