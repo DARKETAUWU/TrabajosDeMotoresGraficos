@@ -198,10 +198,10 @@
     <ClCompile Include="imgui\imgui-docking-znly-docking\backends\imgui_impl_win32.cpp">
       <Filter>Imgui\src</Filter>
     </ClCompile>
-    <ClCompile Include="include\UserInteface.cpp">
+    <ClCompile Include="src\ConstantBuffer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ConstantBuffer.cpp">
+    <ClCompile Include="src\UserInteface.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

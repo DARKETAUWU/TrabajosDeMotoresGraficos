@@ -472,7 +472,6 @@
     <ClCompile Include="imgui\imgui-docking-znly-docking\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui-docking-znly-docking\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui-docking-znly-docking\imgui_widgets.cpp" />
-    <ClCompile Include="include\UserInteface.cpp" />
     <ClCompile Include="src\ConstantBuffer.cpp" />
     <ClCompile Include="src\DepthStencilView.cpp" />
     <ClCompile Include="src\Device.cpp" />
@@ -488,6 +487,7 @@
     <ClCompile Include="src\CTime.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\Tutorial07.cpp" />
+    <ClCompile Include="src\UserInteface.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\Viewport.cpp" />
     <ClCompile Include="src\Window.cpp" />
